@@ -9,16 +9,22 @@
 ## 3: data input
 ## 4: keys input
 
+## GUI
 keyring=`mktemp`
-testzen keygen "${v_keyring}" > $keyring
+testzen generateKeyring "${v_keyring}" > $keyring
 
+
+## generic test
 testzen byte_equal '{"output":["1"]}' '{"left":"dGhpcyBpcyBhIGJhc2U2NCBzdHJpbmcK","right":"dGhpcyBpcyBhIGJhc2U2NCBzdHJpbmcK"}'
 
+
+## GUI
 cat ${gqljson}
 gqlsigned=`mktemp`
-testzen sign_graphql ${v_gqlsigned} ${gqljson} ${keyring} > ${gqlsigned}
+testzen sign ${v_gqlsigned} ${gqljson} ${keyring} > ${gqlsigned}
 # testzen sign_graphql '' ${gqljson} ${keyring} > ${gqlsigned}
 
+## SERVER
 testzen verify_graphql '{"output":["VALID_SIGNATURE"]}' ${gqlsigned} ${keyring}
 
 # cleanup tempfiles
