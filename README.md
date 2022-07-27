@@ -34,12 +34,11 @@ autonumber
   C->>S: Sends public keys
 ```
 
-1. Secret salt is generated at server install and saved as an HEX string in its configuration
-2. Interactive GUI poses all questions in one page: email, name and 5 challenges
-4. As soon as User answers name and email, reactive page sends them to server (ASAP)
-7. As soon as Client receives HMAC the Submit button is green
-8. May happen in parallel while Client and Server are handshaking the HMAC (ASAP)
-9. May need User confirmation that the answers given to challenges are OK
-10. Useful to facilitate seed recovery: the server can check validity of single answers
-12. Start with EDDSA public keys, seed is reused for more key types when needed
-
+- 1) Secret salt is generated at server install and saved as an HEX string in its configuration
+- 2) Interactive GUI poses all questions in one page: email, name and 5 challenges
+- 4) As soon as User answers name and email, reactive page sends them to server (ASAP)
+- 7) As soon as Client receives HMAC the Submit button is green
+- 8) May happen in parallel while Client and Server are handshaking the HMAC (ASAP)
+- 9) May need User confirmation that the answers given to challenges are OK
+- 10) Useful to facilitate seed recovery: the server can check validity of single answers
+- 12) Start with EDDSA public keys, seed is reused for more key types when needed
