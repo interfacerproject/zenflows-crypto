@@ -19,7 +19,6 @@ testzen byte_equal '{"output":["1"]}' '{"left":"dGhpcyBpcyBhIGJhc2U2NCBzdHJpbmcK
 
 
 ## GUI
-cat ${gqljson}
 gqlsigned=`mktemp`
 testzen sign ${v_gqlsigned} ${gqljson} ${keyring} > ${gqlsigned}
 # testzen sign_graphql '' ${gqljson} ${keyring} > ${gqlsigned}
