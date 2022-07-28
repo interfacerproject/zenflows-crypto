@@ -1,90 +1,54 @@
+#!/bin/sh
 
 conf="debug=1,rngseed=hex:00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 
-which zenroom > /dev/null
-if [ $? != 0 ]; then
-	echo "Error: zenroom interpreter not found in PATH"
-	exit 1
-fi
-if ! ls src/*.zen >/dev/null 2>&1 ; then
-	echo "Error: there is no zencode scripts in PWD to run"
-	exit 1
-fi
-
-results=`mktemp`
-echo "# Zenflows tests of zencode scripts" > $results
-echo "# `date`" >> $results
-echo "# " >> $results
-
-function getscript() {
-    if [ -r "src/${1}.zen" ]; then
-	echo "src/${1}.zen"
-	return
-    elif [ -r "src/${1}.ts" ]; then
-	tszen=`mktemp` # TODO: delete later
+getscript() {
+    tszen=`mktemp` # delete later
+    if [ -r "${1}.zen" ]; then
+	cat "${1}.zen" > $tszen
+    elif [ -r "${1}.ts" ]; then
 	awk '
 BEGIN      {zen=0}
 /return `/ { zen=1; next }
 /^`}/      { exit }
-           { if(zen==1) print $0 }
-' src/${1}.ts > $tszen
-	echo $tszen
-	return
+	   { if(zen==1) print $0 }
+' ${1}.ts > $tszen
+    else
+	>&2 echo "Script not found: $1"
+	exit 1
     fi
+    echo $tszen
+    return
 }
 
-function testzen() {
+zexe() {
     script=`getscript ${1}`
-    expect="$2"
-    input="$3"
-    keys="$4"
-    >&2 echo "#####################################################"
-    >&2 echo "# ${script}"
-    >&2 echo "#####################################################"
+    input="$2"
+    keys="$3"
 
     tmpin=`mktemp`
     tmpkey=`mktemp`
     if [ -r "${input}" ]; then
-	cp ${input} ${tmpin}
-    else
-	echo "$input" > $tmpin
+	 cp ${input} ${tmpin}
+    else echo "$input" > $tmpin
     fi
     if [ -r "${keys}" ]; then
-	cp ${keys} ${tmpkey}
-    else
-	echo "$keys" > $tmpkey
+	 cp ${keys} ${tmpkey}
+    else echo "$keys" > $tmpkey
     fi
 
     if [ "$keys" != "" ]; then
-	result=`cat $script | zenroom -z -c $conf -a $tmpin -k $tmpkey`
+	zenroom -z $script -c $conf -a $tmpin -k $tmpkey
+	res=$?
 	rm -f $tmpin $tmpkey
     elif [ "$input" != "" ]; then
-	result=`cat $script | zenroom -z -c $conf -a $tmpin`
+	zenroom -z $script -c $conf -a $tmpin
+	res=$?
 	rm -f $tmpin
     else
-	result=`cat $script | zenroom -z -c $conf`
+	zenroom -z $script -c $conf
+	res=$?
     fi
-
-    res=$?
-    if [ $res != 0 ]; then
-	echo "# [!] Parse error in $script" >> $results
-	echo "# $result" >> $results
-	error
-    else
-	# if [ "$result" != "$expect" ]; then
-	#     echo "# [!] Error in $script" >> $results
-	#     echo "# $result" >> $results
-	#     error
-	# else
-	    echo "#  .  Success: $script" >> $results
-	    echo "$result"
-	# fi
-    fi
-}
-
-error() {
-    echo >> $results
-    >&2 cat $results
-    rm -f $results
-    exit 1
+    rm -f $script # getscript() generates this mktemp
+    return $res
 }

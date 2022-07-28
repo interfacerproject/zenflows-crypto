@@ -2,4 +2,4 @@
 .PHONY: test
 
 test:
-	bash test/scripts.sh
+	bash test/bats/bin/bats test/test.bats
