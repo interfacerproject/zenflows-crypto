@@ -2,7 +2,7 @@
 Given I have a 'string' named 'theBackendPassword'
 
 # Loading the data that the user is entering at the signup. This data will be sent from the client to the server
-Given I have a 'base64' named 'userData'
+Given I have a 'string dictionary' named 'userData'
 
 # The server creates a HMAC of the 'userData'
 When I create the HMAC of 'userData' with key 'theBackendPassword'
