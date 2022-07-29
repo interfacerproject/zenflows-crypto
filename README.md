@@ -1,9 +1,8 @@
 # Zencode crypto in Zenflows
 
+![crypto tests](https://github.com/dyne/zenflows-crypto/actions/workflows/make-tests.yml/badge.svg)
 
 ![Zenflows logo](https://github.com/dyne/zenflows/raw/master/docs/zenflows_rea_logo.png)
-
-![crypto tests](https://github.com/dyne/zenflows-crypto/actions/workflows/make-tests.yml/badge.svg)
 
 Zenflows is a tool to leverage commons-based peer production by
 documenting and monitoring the life cycle of products. The goal is
@@ -29,6 +28,7 @@ The `test` directory contains unit tests (single scripts tested in local) and in
 
 # Sequence diagrams
 
+Below are detailed the most complex crypto exchanges taking place in Zenflows.
 
 ## Login creation
 
@@ -52,6 +52,14 @@ autonumber
   C->>C: Generate public keys from SEED
   C->>S: Sends public keys
 ```
+
+### Zencode
+
+- [keypairoomClient-8-9-10-11-12](src/keypairoomClient-8-9-10-11-12.ts)
+- [keypairoomServer-6-7](src/keypairoomServer-6-7.zen)
+- [keypairoomClientRecreateKeys](src/keypairoomClientRecreateKeys.ts)
+
+### Notes
 
 - 1: Secret salt is generated at server install and saved as an HEX string in its configuration
 - 2: Interactive GUI poses all questions in one page: email, name and 5 challenges
