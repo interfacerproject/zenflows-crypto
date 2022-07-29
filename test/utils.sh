@@ -32,13 +32,15 @@ zexe() {
     if [ -r "${input}" ]; then
 	 cp ${input} ${tmpin}
     else
-	# TODO: check that is a valid json
+	echo "$input" | jq . # check that var is valid json
+	if [ $? != 0 ]; then return $?; fi
 	echo "$input" > $tmpin
     fi
     if [ -r "${keys}" ]; then
 	 cp ${keys} ${tmpkey}
     else
-	# TODO: check that is a valid json
+	echo "$keys" | jq . # check that var is valid json
+	if [ $? != 0 ]; then return $?; fi
 	echo "$keys" > $tmpkey
     fi
 
