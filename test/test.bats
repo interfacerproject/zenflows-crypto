@@ -46,7 +46,7 @@ EOF
 
 @test "Sign GraphQL" {
     assert_file_not_empty $TMP/keyring.json
-    zexe $SRC/sign ${gqljson} $TMP/keyring.json
+    zexe $SRC/sign_graphql ${gqljson} $TMP/keyring.json
     assert_output "${v_gqlsigned}"
     echo "$output" > $TMP/gqlsigned.json
 }
