@@ -101,7 +101,7 @@ When I insert 'nameMotherMaid.kdf' in 'hashedAnswers'
 Then print the 'keyring' 
 
 # this prints the hashes of the challenges
-Then print the 'hashedAnswers'
+# Then print the 'hashedAnswers'
 
 # This prints the seed for the private keys as mnemonic 
 Then print the 'seed' as 'mnemonic'

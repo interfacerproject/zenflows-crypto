@@ -32,8 +32,7 @@ EOF
 
 @test "Keyring seed recovery from mnemonic" {
     zexe $SRC/keypairoomClientRecreateKeys $TMP/keyring.json
-    # assert_output "${v_keyring}"
-    # TODO: harmonize keyring output to enforce this check
+    assert_output "${v_keyring}"
 }
 
 @test "Sign GraphQL" {
