@@ -3,7 +3,7 @@ setup() {
     DIR="$( cd "$( dirname "$BATS_TEST_FILENAME" )" >/dev/null 2>&1 && pwd )"
     SRC="$DIR/../src"
     PATH="$SRC:$PATH"
-    TMP=$BATS_RUN_TMPDIR # $BATS_SUITE_TMPDIR
+    TMP=$BATS_RUN_TMPDIR
     load 'test_helper/bats-support/load'
     load 'test_helper/bats-assert/load'
     load 'test_helper/bats-file/load'
@@ -12,15 +12,24 @@ setup() {
 }
 
 # teardown() { rm -rf $TMP }
-@test "Zenroom is installed" {
+@test "Zenroom is executable installed" {
     zenroom="$(which zenroom)"
     assert_file_executable "$zenroom"
 }
 
-@test "Keyring seed creation from challenges" {
-    cat << EOF > $TMP/keypairroomSalt.json
-{"seedServerSideShard.HMAC":"qf3skXnPGFMrE28UJS7S8BdT8g=="}
+@test "Server side shard created from user data" {
+cat <<EOF > $TMP/severSideSalt.json
+{"serverSideSalt":"qf3skXnPGFMrE28UJS7S8BdT8g=="}
 EOF
+cat <<EOF > $TMP/userData.json
+{"userData":{"name":"Luther Blissett","email":"luther@dyne.org"}}
+EOF
+zexe $SRC/keypairoomServer-6-7 $TMP/severSideSalt.json $TMP/userData.json
+assert_output '{"seedServerSideShard.HMAC":"WjryuofWthYvGKMgk24pxr6QpJDYqvmF0nMaedx9Q7U="}'
+echo "$output" > $TMP/keypairroomSalt.json
+}
+
+@test "Keyring seed creation from challenges" {
     cat << EOF > $TMP/keypairroomChallengeInput.json
 {"userChallenges":{"whereParentsMet":"brontolo","nameFirstPet":"pisolo","whereHomeTown":"mammolo","nameFirstTeacher":"cucciolo","nameMotherMaid":"gongolo"},"username":"JohnDoe"}
 EOF
