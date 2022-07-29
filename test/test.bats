@@ -26,7 +26,7 @@ cat <<EOF > $TMP/userData.json
 EOF
 zexe $SRC/keypairoomServer-6-7 $TMP/severSideSalt.json $TMP/userData.json
 assert_output '{"seedServerSideShard.HMAC":"WjryuofWthYvGKMgk24pxr6QpJDYqvmF0nMaedx9Q7U="}'
-echo "$output" > $TMP/keypairroomSalt.json
+echo "$output" | save_json $TMP/keypairroomSalt.json
 }
 
 @test "Keyring seed creation from challenges" {
@@ -36,11 +36,11 @@ EOF
     zexe $SRC/keypairoomClient-8-9-10-11-12 \
 	 $TMP/keypairroomChallengeInput.json $TMP/keypairroomSalt.json
     assert_output "${v_keyring}"
-    echo "$output" > $TMP/keyring.json
+    echo "$output" | save_json $TMP/keyring.json
 }
 
 @test "Keyring seed recovery from mnemonic" {
-    zexe $SRC/keypairoomClientRecreateKeys $TMP/keyring.json
+    zexe $SRC/keypairoomClientRecreateKeys $TMP/keyring.json  $TMP/keypairroomSalt.json
     assert_output "${v_keyring}"
 }
 
@@ -48,7 +48,7 @@ EOF
     assert_file_not_empty $TMP/keyring.json
     zexe $SRC/sign_graphql ${gqljson} $TMP/keyring.json
     assert_output "${v_gqlsigned}"
-    echo "$output" > $TMP/gqlsigned.json
+    echo "$output" | save_json $TMP/gqlsigned.json
 }
 
 @test "Verify GraphQL" {

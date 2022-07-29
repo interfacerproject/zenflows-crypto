@@ -10,26 +10,23 @@ Scenario 'eddsa': Create the key
 
 # here we load the seed as a mnemonic
 Given I have a 'mnemonic' named 'seed'
+and   I have a 'base64' named 'seedServerSideShard.HMAC'
+
+When I rename 'seedServerSideShard.HMAC' to 'salt'
+and I create the key derivation of 'seed' with password 'salt'
+and I rename the 'key derivation' to 'seed.root'
 
 # SKs generation
 # In this flow the order should NOT be changed
-
-When I create the hash of 'seed'
-When I rename the 'hash' to 'seed.root'
-
-When I create the hash of 'seed.root'
+When I create the  hash  of 'seed.root'
 When I rename the 'hash' to 'seed.ecdh'
-
-When I create the hash of 'seed.ecdh'
+When I create the  hash  of 'seed.ecdh'
 When I rename the 'hash' to 'seed.eddsa'
-
-When I create the hash of 'seed.eddsa'
+When I create the  hash  of 'seed.eddsa'
 When I rename the 'hash' to 'seed.ethereum'
-
-When I create the hash of 'seed.ethereum'
+When I create the  hash  of 'seed.ethereum'
 When I rename the 'hash' to 'seed.reflow'
-
-When I create the hash of 'seed.reflow'
+When I create the  hash  of 'seed.reflow'
 When I rename the 'hash' to 'seed.schnorr'
 
 When I create the ecdh key with secret key 'seed.ecdh'

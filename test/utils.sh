@@ -60,7 +60,6 @@ zexe() {
     return $status
 }
 
-
 debug() {
     conf="debug=1,rngseed=hex:00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
     >&3 echo "Zencode: `getscript ${1}`"
@@ -69,7 +68,6 @@ debug() {
     if [ $? != 0 ]; then return $?; fi
     input="$2"
     keys="$3"
-
     tmpin=`mktemp`
     tmpkey=`mktemp`
     if [ -r "${input}" ]; then
@@ -80,7 +78,6 @@ debug() {
 	 cp ${keys} ${tmpkey}
     else echo "$keys" > $tmpkey
     fi
-
     if [ "$keys" != "" ]; then
 	>&3 zenroom -z $script -c $conf -a $tmpin -k $tmpkey
 	res=$?
@@ -95,4 +92,45 @@ debug() {
     fi
     rm -f $script # getscript() generates this mktemp
     return $res
+}
+
+# example:
+# json_extract "Alice" petition_request.json > petition_keypair.json
+function json_extract {
+	if ! [ -r extract.jq ]; then
+		cat <<EOF > extract.jq
+# break out early
+def filter(\$key):
+  label \$out
+  | foreach inputs as \$in ( null;
+      if . == null
+      then if \$in[0][0] == \$key then \$in
+           else empty
+           end
+      elif \$in[0][0] != \$key then break \$out
+      else \$in
+      end;
+      select(length==2) );
+reduce filter(\$key) as \$in ({};
+  setpath(\$in[0]; \$in[1]) )
+EOF
+	fi
+	jq -n -c --arg key "$1" --stream -f extract.jq "$2"
+}
+# example:
+# json_remove "Alice" petition_request.json
+function json_remove {
+	tmp=`mktemp`
+	jq -M "del(.$1)" $2 > $tmp
+	mv $tmp $2
+	rm -f $tmp
+}
+
+function json_join {
+	jq -s 'reduce .[] as $item ({}; . * $item)' $*
+}
+
+function save_json {
+    # arg is file to save
+    tee "$1" | >&3 jq .
 }
