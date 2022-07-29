@@ -12,47 +12,39 @@ setup() {
 }
 
 # teardown() { rm -rf $TMP }
+@test "Zenroom is installed" {
+    zenroom="$(which zenroom)"
+    assert_file_executable "$zenroom"
+}
 
 @test "Keyring seed creation from challenges" {
-
-    ## Keypairroom
     cat << EOF > $TMP/keypairroomSalt.json
-{ "seedServerSideShard.HMAC": "qf3skXnPGFMrE28UJS7S8BdT8g==" }
+{"seedServerSideShard.HMAC":"qf3skXnPGFMrE28UJS7S8BdT8g=="}
 EOF
     cat << EOF > $TMP/keypairroomChallengeInput.json
-{
-  "userChallenges": {
-    "whereParentsMet": "brontolo",
-    "nameFirstPet": "pisolo",
-    "whereHomeTown": "mammolo",
-    "nameFirstTeacher": "cucciolo",
-    "nameMotherMaid": "gongolo"
-  },
-  "username": "JohnDoe"
-}
+{"userChallenges":{"whereParentsMet":"brontolo","nameFirstPet":"pisolo","whereHomeTown":"mammolo","nameFirstTeacher":"cucciolo","nameMotherMaid":"gongolo"},"username":"JohnDoe"}
 EOF
-
-    run --separate-stderr \
-	zexe ${SRC}/keypairoomClient-8-9-10-11-12 \
-	$TMP/keypairroomChallengeInput.json $TMP/keypairroomSalt.json
-    assert_success
+    zexe $SRC/keypairoomClient-8-9-10-11-12 \
+	 $TMP/keypairroomChallengeInput.json $TMP/keypairroomSalt.json
     assert_output "${v_keyring}"
     echo "$output" > $TMP/keyring.json
 }
 
+@test "Keyring seed recovery from mnemonic" {
+    zexe $SRC/keypairoomClientRecreateKeys $TMP/keyring.json
+    # assert_output "${v_keyring}"
+    # TODO: harmonize keyring output to enforce this check
+}
+
 @test "Sign GraphQL" {
     assert_file_not_empty $TMP/keyring.json
-    run --separate-stderr \
-	zexe $SRC/sign ${gqljson} $TMP/keyring.json
-    assert_success
+    zexe $SRC/sign ${gqljson} $TMP/keyring.json
     assert_output "${v_gqlsigned}"
     echo "$output" > $TMP/gqlsigned.json
 }
 
 @test "Verify GraphQL" {
     assert_file_not_empty $TMP/gqlsigned.json
-    run --separate-stderr \
-	zexe $SRC/verify_graphql $TMP/gqlsigned.json $TMP/keyring.json
-    assert_success
+    zexe $SRC/verify_graphql $TMP/gqlsigned.json $TMP/keyring.json
     assert_output '{"output":["1"]}'
 }

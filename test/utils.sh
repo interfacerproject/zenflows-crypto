@@ -1,7 +1,5 @@
 #!/bin/sh
 
-conf="debug=1,rngseed=hex:00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-
 getscript() {
     tszen=`mktemp` # delete later
     if [ -r "${1}.zen" ]; then
@@ -14,15 +12,59 @@ BEGIN      {zen=0}
 	   { if(zen==1) print $0 }
 ' ${1}.ts > $tszen
     else
-	>&2 echo "Script not found: $1"
-	exit 1
+	>&2 echo "Zencode source not found: $1"
+	return 1
     fi
     echo $tszen
-    return
+    return 0
 }
 
 zexe() {
+    conf="debug=1,rngseed=hex:00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
     script=`getscript ${1}`
+    if [ $? != 0 ]; then return $?; fi
+    input="$2"
+    keys="$3"
+    stdout="" # BATS compatible
+    status=1 # BATS compatible
+    tmpin=`mktemp`
+    tmpkey=`mktemp`
+    if [ -r "${input}" ]; then
+	 cp ${input} ${tmpin}
+    else
+	# TODO: check that is a valid json
+	echo "$input" > $tmpin
+    fi
+    if [ -r "${keys}" ]; then
+	 cp ${keys} ${tmpkey}
+    else
+	# TODO: check that is a valid json
+	echo "$keys" > $tmpkey
+    fi
+
+    if [ "$keys" != "" ]; then
+	output=`zenroom -z $script -c $conf -a $tmpin -k $tmpkey`
+	status=$?
+	rm -f $tmpin $tmpkey
+    elif [ "$input" != "" ]; then
+	output=`zenroom -z $script -c $conf -a $tmpin`
+	status=$?
+	rm -f $tmpin
+    else
+	output=`zenroom -z $script -c $conf`
+	status=$?
+    fi
+    rm -f $script # getscript() generates this mktemp
+    return $status
+}
+
+
+debug() {
+    conf="debug=1,rngseed=hex:00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    >&3 echo "Zencode: `getscript ${1}`"
+    script=`getscript ${1}`
+    >&3 cat $script
+    if [ $? != 0 ]; then return $?; fi
     input="$2"
     keys="$3"
 
@@ -38,15 +80,15 @@ zexe() {
     fi
 
     if [ "$keys" != "" ]; then
-	zenroom -z $script -c $conf -a $tmpin -k $tmpkey
+	>&3 zenroom -z $script -c $conf -a $tmpin -k $tmpkey
 	res=$?
 	rm -f $tmpin $tmpkey
     elif [ "$input" != "" ]; then
-	zenroom -z $script -c $conf -a $tmpin
+	>&3 zenroom -z $script -c $conf -a $tmpin
 	res=$?
 	rm -f $tmpin
     else
-	zenroom -z $script -c $conf
+	>&3 zenroom -z $script -c $conf
 	res=$?
     fi
     rm -f $script # getscript() generates this mktemp
