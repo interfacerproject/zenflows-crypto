@@ -1,0 +1,46 @@
+# allow list
+/*
+
+# git stuff
+!/.gitignore
+
+# build stuff
+!/Dockerfile
+!/Makefile
+
+# license and readme
+!/LICENSE
+!/README.md
+!/CONTRIBUTING.md
+
+# useful confs
+!/.editorconfig
+!/.envrc
+!/.github
+!/.dockerignore
+
+# src code
+!/src/
+/src/*
+!/src/*/
+/src/*/*
+!/src/*/*/
+/src/*/*/*
+!/src/*/*/*/
+
+# tests
+!/test/
+/test/*
+!/test/*/
+/test/*/*
+!/test/*/*/
+/test/*/*/*
+!/test/*/*/*/
+
+# docs
+!/docs/
+/docs/*
+!/docs/*.md
+!/docs/*.png
+!/docs/*.jpg
+
