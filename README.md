@@ -1,6 +1,6 @@
 # Zencode crypto in Zenflows
 
-![crypto tests](https://github.com/dyne/zenflows-crypto/actions/workflows/make-tests.yml/badge.svg)
+[![crypto tests](https://github.com/dyne/zenflows-crypto/actions/workflows/make-tests.yml/badge.svg)](https://github.com/dyne/zenflows-crypto/actions)
 
 ![Zenflows logo](https://github.com/dyne/zenflows/raw/master/docs/zenflows_rea_logo.png)
 
