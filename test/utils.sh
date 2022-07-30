@@ -130,7 +130,11 @@ function json_join {
 	jq -s 'reduce .[] as $item ({}; . * $item)' $*
 }
 
-function save_json {
+function save_output {
     # arg is file to save
-    tee "$1" | >&3 jq .
+    if [ "$(echo $1 | cut -d. -f -1)" == "json" ]; then
+	echo "$output" | tee "$1" | >&3 jq .
+    else
+	echo "$output" | tee "$1"
+    fi
 }
