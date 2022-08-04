@@ -29,23 +29,20 @@ Given I have a 'string' named 'nameFirstTeacher' in 'userChallenges'
 Given I have a 'string' named 'nameMotherMaid' in 'userChallenges'
 
 # Loading the pbkdf received from the server, containing a signed hash of known data
-Given that I have a 'base64' named 'seedServerSideShard.HMAC' 
+Given that I have a 'base64' named 'seedServerSideShard.HMAC'  
 
-# Save the backup for mnemonic dump, before factoring with the salt
-# it is shortened to 16 bytes by hashing sha512 the KDF and taking the first 16 bytes
-When I create the key derivation of 'userChallenges'
-and I create the hash of 'key derivation' using 'sha512'
-and I split the leftmost '16' bytes of 'hash'
-and I delete the 'key derivation'
-and I delete the 'hash'
-and I rename the 'leftmost' to 'seed'
+When I copy 'seedServerSideShard.HMAC' to 'salt'
 
-# Hash again the user's challenges with salt for the seed root
-When I rename 'seedServerSideShard.HMAC' to 'salt'
-and I create the key derivation of 'seed' with password 'salt'
-and I rename the 'key derivation' to 'seed.root'
+# Hashing the user's challenges and renaming it
+When I create the key derivation of 'userChallenges' with password 'salt'
 
-# In the following flow the order should NOT be changed
+When I split the leftmost '16' bytes of 'key derivation'
+When I delete the 'key derivation'
+When I rename the 'leftmost' to 'seed'
+
+# In this flow the order should NOT be changed
+When I create the hash of 'seed'
+When I rename the 'hash' to 'seed.root'
 
 When I create the hash of 'seed.root'
 When I rename the 'hash' to 'seed.ecdh'
@@ -62,8 +59,6 @@ When I rename the 'hash' to 'seed.reflow'
 When I create the hash of 'seed.reflow'
 When I rename the 'hash' to 'seed.schnorr'
 
-# end of the sorted creation flow
-
 When I create the ecdh key with secret key 'seed.ecdh'
 When I create the eddsa key with secret key 'seed.eddsa'
 When I create the ethereum key with secret key 'seed.ethereum'
@@ -75,6 +70,7 @@ When I create the eddsa public key
 When I create the ethereum address
 When I create the reflow public key
 When I create the schnorr public key
+
 
 # Creating the hashes of the single challenges, to OPTIONALLY help 
 # regeneration of the keypair
@@ -107,7 +103,7 @@ When I insert 'nameMotherMaid.kdf' in 'hashedAnswers'
 Then print the 'keyring' 
 
 # this prints the hashes of the challenges
-# Then print the 'hashedAnswers'
+Then print the 'hashedAnswers'
 
 # This prints the seed for the private keys as mnemonic 
 Then print the 'seed' as 'mnemonic'
