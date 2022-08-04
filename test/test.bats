@@ -26,7 +26,14 @@ EOF
 EOF
     zexe $SRC/keypairoomServer-6-7 $TMP/severSideSalt.json $TMP/userData.json
     assert_output '{"seedServerSideShard.HMAC":"gdwZgCQUlNE6mW53fi10xEvSlUuTXUFJhwmqIekoHlY="}'
-    save_output $TMP/keypairroomSalt.json
+    save_output $TMP/keypairroomSalt1.json
+
+    cat <<EOF > $TMP/userData.json
+{"userData":{"name":"Serpica Naro","email":"snaro@dyne.org"}}
+EOF
+    zexe $SRC/keypairoomServer-6-7 $TMP/severSideSalt.json $TMP/userData.json
+    assert_output '{"seedServerSideShard.HMAC":"J+GvYL8EOCa5EFMzowGIRn9Du1+cM57wQQLSKHrugr4="}'
+    save_output $TMP/keypairroomSalt2.json
 }
 
 @test "Keyring seed creation from challenges" {
@@ -34,13 +41,17 @@ EOF
 {"userChallenges":{"whereParentsMet":"brontolo","nameFirstPet":"pisolo","whereHomeTown":"mammolo","nameFirstTeacher":"cucciolo","nameMotherMaid":"gongolo"},"username":"JohnDoe"}
 EOF
     zexe $SRC/keypairoomClient-8-9-10-11-12 \
-	 $TMP/keypairroomChallengeInput.json $TMP/keypairroomSalt.json
+	 $TMP/keypairroomChallengeInput.json $TMP/keypairroomSalt1.json
     assert_output "${v_keyring}"
     save_output $TMP/keyring.json
+
+    zexe $SRC/keypairoomClient-8-9-10-11-12 \
+	 $TMP/keypairroomChallengeInput.json $TMP/keypairroomSalt2.json
+    assert_not_equal "$output" "${v_keyring}"
 }
 
 @test "Keyring seed recovery from mnemonic" {
-    zexe $SRC/keypairoomClientRecreateKeys $TMP/keyring.json  $TMP/keypairroomSalt.json
+    zexe $SRC/keypairoomClientRecreateKeys $TMP/keyring.json  $TMP/keypairroomSalt1.json
     assert_output "${v_keyring}"
 }
 
