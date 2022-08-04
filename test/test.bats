@@ -25,7 +25,7 @@ EOF
 {"userData":{"name":"Luther Blissett","email":"luther@dyne.org"}}
 EOF
     zexe $SRC/keypairoomServer-6-7 $TMP/severSideSalt.json $TMP/userData.json
-    assert_output '{"seedServerSideShard.HMAC":"WjryuofWthYvGKMgk24pxr6QpJDYqvmF0nMaedx9Q7U="}'
+    assert_output '{"seedServerSideShard.HMAC":"gdwZgCQUlNE6mW53fi10xEvSlUuTXUFJhwmqIekoHlY="}'
     save_output $TMP/keypairroomSalt.json
 }
 
