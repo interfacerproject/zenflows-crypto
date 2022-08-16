@@ -22,8 +22,7 @@ Given I have a 'base58' named 'eddsa public key'
 
 # Fix Apollo's mingling with query string
 When I remove spaces in 'gql'
-and I remove newlines in 'gql'
-
+and I compact ascii strings in ''
 When I verify the 'gql' has a eddsa signature in 'eddsa signature' by 'eddsa public key'
 
 Then print the string '1'
