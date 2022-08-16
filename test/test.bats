@@ -22,20 +22,20 @@ setup() {
 {"serverSideSalt":"qf3skXnPGFMrE28UJS7S8BdT8g=="}
 EOF
     cat <<EOF > $TMP/userData.json
-{"userData":{"name":"Luther Blissett","email":"luther@dyne.org"}}
+{"userData":{"email":"luther@dyne.org"}}
 EOF
     zexe $SRC/keypairoomServer-6-7 $TMP/severSideSalt.json $TMP/userData.json
-    assert_output '{"seedServerSideShard.HMAC":"gdwZgCQUlNE6mW53fi10xEvSlUuTXUFJhwmqIekoHlY="}'
+    assert_output '{"seedServerSideShard.HMAC":"GWvChJgx3KQWFYgz7jVpn353Kzi3pzqK2fQjZ3+M05g="}'
     save_output $TMP/keypairroomSalt1.json
 
 }
 @test "Shard differs with a different email" {
     cat <<EOF > $TMP/userData.json
-{"userData":{"name":"Serpica Naro","email":"snaro@dyne.org"}}
+{"userData":{"email":"snaro@dyne.org"}}
 EOF
     zexe $SRC/keypairoomServer-6-7 $TMP/severSideSalt.json $TMP/userData.json
-    refute_output '{"seedServerSideShard.HMAC":"gdwZgCQUlNE6mW53fi10xEvSlUuTXUFJhwmqIekoHlY="}'
-    assert_output '{"seedServerSideShard.HMAC":"J+GvYL8EOCa5EFMzowGIRn9Du1+cM57wQQLSKHrugr4="}'
+    refute_output '{"seedServerSideShard.HMAC":"GWvChJgx3KQWFYgz7jVpn353Kzi3pzqK2fQjZ3+M05g="}'
+    assert_output '{"seedServerSideShard.HMAC":"FdWEMKbCiRxlR05rKGfyfjVVE3jMcaYr1hgu3kTNGSk="}'
     save_output $TMP/keypairroomSalt2.json
 }
 
