@@ -3,15 +3,13 @@
 Given I have a 'base64' named 'serverSideSalt'
 
 # Loading the data that the user is entering at the signup. This data will be sent from the client to the server
-Given I have a 'string' named 'name' in 'userData'
-and I have a 'string' named 'email' in 'userData'
+Given I have a 'string' named 'email' in 'userData'
 
 # The server also checks email validity (RFC2047)
 When I verify 'email' is a email
-and I append 'email' to 'name'
 
 # Then creates a HMAC of the user data mixed with salt
-When I create the HMAC of 'name' with key 'serverSideSalt'
+When I create the HMAC of 'email' with key 'serverSideSalt'
 When I rename the 'HMAC' to 'seedServerSideShard.HMAC'
 
 # Here we print the HMAC
