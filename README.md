@@ -99,19 +99,19 @@ autonumber
   participant C as 📱Client
   participant S as 🐧Server
   participant F as 💽Storage
-  C->>+S: GQL Mutation with File ::hash and ::size, no bin
-  S->>-S: Saves ::hash and ::size as accepting ::bin
+  C->>S: GQL Mutation with File ::hash and ::size, no ::bin
+  S->>F: Saves ::hash and ::size as accepted for upload
   C->>F: Try to upload ::bin with ::hash and ::size in headers
-  F->>S: Check if ::hash and ::size exist and has no ::bin
-  F->>C: Allows upload until verified ::size
+  F->>F: Check ::hash and ::size
+  C->>F: Allows upload until verified ::size
   F->>F: Check matching ::hash of uploaded ::bin
   F->>C: Saves and makes available File::bin as content of ::hash
 ```
 
 1. Clients can make mutations on servers containing the File field detailed above
-2. Servers saves new mutations (no bin, only hash and size) into a special table
+2. Servers communicated hash and size to Storage as accepting uploads
 3. Clients may try to upload to Storage the content of File at any later time
-4. Storage contacts Server to check if hash and size exist and are not yet uploaded
+4. Storage checks if hash and size are accepted for upload
 5. Storage may abort the upload or allow it reading data only until size
 6. Storage checks hash of uploaded data
 7. Storage saves the data as File::bin and serves it on HTTP GET as File::hash
