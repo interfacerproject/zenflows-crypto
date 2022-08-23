@@ -100,13 +100,13 @@ autonumber
   participant C as 📱Client
   participant S as 🐧Server
   participant F as 💽Storage
-  C->>S: Mutate (GQL) with File ::hash and ::size, no ::bin
-  S->>F: Sign ::hash and ::size as accepted for upload
+  C->>S: Mutate (GQL) adds File:: without ::bin
+  S->>F: Sign ::hash ::size ::mime as accepted for upload
   C->>F: Upload ::bin with ::hash and ::size in headers
   F->>F: Check ::hash and ::size
   C->>F: Allow upload until verified ::size
   F->>F: Check matching ::hash of uploaded ::bin
-  F->>C: Save and makes available File::bin as content of ::hash
+  F->>C: Serve File::bin as :mime content of ::hash URI
 ```
 
 ### Notes
