@@ -77,18 +77,18 @@ File field (GraphQL)
 
 ```
 type File {
-  hash: Base64! # sha512
+  hash: Base64!        # sha512
   name: String!
   description: String!
   date: DateTime!
   mimeType: String!
   extension: String!
   size: Integer!
-  width: Integer
-  height: Integer
   uploader: Agent!
   signature: String!
-  bin: String # uploaded async
+  width: Integer
+  height: Integer
+  bin: Base64          # uploaded async
 }
 ```
 
@@ -99,13 +99,13 @@ autonumber
   participant C as 📱Client
   participant S as 🐧Server
   participant F as 💽Storage
-  C->>+S: GQL Mutation with File hash and size, no bin
-  S->>-S: Saves hash and size as accepting bin
-  C->>F: Try to upload bin with hash and size
-  F->>S: Check is hash and size exist and has no bin
-  F->>C: Aborts or allows upload until size
-  F->>F: Check matching hash of uploaded bin
-  F->>C: Saves and makes available bin as content of hash
+  C->>+S: GQL Mutation with File ::hash and ::size, no bin
+  S->>-S: Saves ::hash and ::size as accepting ::bin
+  C->>F: Try to upload ::bin with ::hash and ::size in headers
+  F->>S: Check if ::hash and ::size exist and has no ::bin
+  F->>C: Allows upload until verified ::size
+  F->>F: Check matching ::hash of uploaded ::bin
+  F->>C: Saves and makes available File::bin as content of ::hash
 ```
 
 1. Clients can make mutations on servers containing the File field detailed above
