@@ -102,7 +102,7 @@ autonumber
   participant F as 💽Storage
   C->>S: Mutate (GQL) adds File:: without ::bin
   S->>F: Sign ::hash ::size ::mime as accepted for upload
-  C->>F: Upload ::bin with ::hash and ::size in headers
+  C->>F: Upload ::bin in body with ::hash in header
   F->>F: Check ::hash and ::size
   C->>F: Allow upload until verified ::size
   F->>F: Check matching ::hash of uploaded ::bin
@@ -113,7 +113,7 @@ autonumber
 
 1. Clients can make signed mutations on servers containing the File field detailed above
 2. Servers signs a message to Storage about hash and size as accepted for upload (expiry)
-3. Clients may upload to Storage the content of File at any later time (expiry)
+3. Clients may upload to Storage the content of File of declared size at any later time (expiry), upload is made in multi-part and header with hash is content-disposition
 4. Storage checks if hash and size are accepted for upload
 5. Storage may abort the upload or allow it reading data only until size
 6. Storage checks hash of uploaded data
