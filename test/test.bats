@@ -82,3 +82,23 @@ EOF
     zexe $SRC/verify_graphql $TMP/gqlsigned.json $TMP/keyring.json
     assert_output '{"output":["1"]}'
 }
+
+@test "Generate File" {
+    cat <<EOF > $TMP/filegen.zen
+Given Nothing
+When I create the random object of '500' bytes
+and I rename the 'random object' to 'hashedFile'
+Then print the 'hashedFile' as 'url64'
+EOF
+    zexe $TMP/filegen
+    save_output $TMP/hashfile.json
+}
+
+@test "Sign File" {
+    assert_file_not_empty $TMP/keyring.json
+    assert_file_not_empty $TMP/hashfile.json
+
+    zexe $SRC/sign_file $TMP/hashfile.json $TMP/keyring.json
+    assert_output '{"eddsa_signature":"6w1c14Lqlo6vt/g4GvGeo1WZu0ee0GUFOewEj3oIBOgKe7p/XqL5+sVyp5mN9g2fucY2qJABtOCeJ35fM/a9Dw==","hash":"91c2f55a63a312befcff337af18c1703b15520c8fa90753c6ced10f70dbf1b92"}'
+    save_output $TMP/file_signature.json
+}
