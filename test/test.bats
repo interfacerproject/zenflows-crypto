@@ -97,8 +97,28 @@ EOF
 @test "Sign File" {
     assert_file_not_empty $TMP/keyring.json
     assert_file_not_empty $TMP/hashfile.json
-
     zexe $SRC/sign_file $TMP/hashfile.json $TMP/keyring.json
-    assert_output '{"eddsa_signature":"6w1c14Lqlo6vt/g4GvGeo1WZu0ee0GUFOewEj3oIBOgKe7p/XqL5+sVyp5mN9g2fucY2qJABtOCeJ35fM/a9Dw==","hash":"91c2f55a63a312befcff337af18c1703b15520c8fa90753c6ced10f70dbf1b92"}'
+    assert_output '{"eddsa_signature":"5hZwNEiKQx5Woy6y5QnR2RK1TLhi64sD7Z4UQnAaqU9UWcv9WY2MY1kxrw2A2f5FHWfWJ5CxtHimf2bE8vFpKgZL","hash":"91c2f55a63a312befcff337af18c1703b15520c8fa90753c6ced10f70dbf1b92"}'
     save_output $TMP/file_signature.json
+}
+
+@test "Conjoin Signature and Public key" {
+    cat <<EOF > $TMP/conjoin_pubkey_sig.zen
+Scenario eddsa
+Given I have a 'base64' named 'eddsa signature'
+and I have a 'hex' named 'hash'
+and I have a 'keyring'
+When I create the eddsa public key
+Then print the 'hash' as 'hex'
+and print the 'eddsa public key'
+and print the 'eddsa signature' as 'base64'
+EOF
+    zexe $TMP/conjoin_pubkey_sig $TMP/file_signature.json $TMP/keyring.json
+    save_output $TMP/pk_sig.json
+}
+
+@test "Verify File" {
+   assert_file_not_empty $TMP/hashfile.json
+   zexe $SRC/verify_file $TMP/hashfile.json $TMP/pk_sig.json
+   assert_output '{"output":["signature_is_valid"]}'
 }
