@@ -1,0 +1,11 @@
+Scenario 'eddsa'
+Given I have a 'eddsa public key'
+and I have a 'eddsa signature'
+and I have a 'url64' named 'hashedFile'
+and I have a 'url64' named 'signed_hash'
+
+When I create the hash of 'hashedFile'
+and I verify 'hash' is equal to 'signed_hash'
+When I verify the 'signed_hash' has a eddsa signature in 'eddsa signature' by 'client'
+
+Then print the string 'signature is valid'
