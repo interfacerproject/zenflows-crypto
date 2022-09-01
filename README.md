@@ -79,10 +79,10 @@ Detail of each query
 
 ```
 type File {
-  hash: Base64!        # sha512
+  hash: Url64!         # sha512
   name: String!
-  description: String!
-  date: DateTime!
+  description: String
+  date: DateTime
   mimeType: String!
   extension: String!
   size: Integer!
@@ -95,7 +95,7 @@ type File {
 
 ```
 type UploadWindow {
-	pk: Base64!
+	pk: Base58!
 	expiry: DateTime!  # decided by Server
 	{ File:: }         # sent by Server
 }
@@ -105,8 +105,8 @@ type UploadWindow {
 
 ```
 type Upload {
-	hash: Base64!         # header
-	signature: Base64!    # header
+	hash: Url64!         # header
+	signature: Base58!    # header
 	bin: Base64!          # multi-part body
 	uploadDate: DateTime! # Storage fills after upload
 }
@@ -116,9 +116,9 @@ type Upload {
 
 ```
 type File {
-  hash: Base64!        # sha512
+  hash: Url64!        # sha512
   name: String!
-  description: String!
+  description: String
   date: DateTime!
   uploadDate: DateTime!
   mimeType: String!
