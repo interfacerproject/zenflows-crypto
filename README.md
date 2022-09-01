@@ -77,31 +77,37 @@ Detail of each query
 
 ### Upload Request query from Client to Server
 
+Uploader Agent is known by the Server and Client signs this query
+
 ```
-type File {
-  hash: Url64!         # sha512
-  name: String!
-  description: String
-  date: DateTime
-  mimeType: String!
-  extension: String!
-  size: Integer!
-  uploader: Agent!
-  # bin: Base64        # uploaded async
+UploadRequest{
+    hash: Url64!         # sha512
+    name: String!
+    description: String
+    date: DateTime
+    mimeType: String!
+    extension: String!
+    size: Integer!
 }
 ```
 
 ### Upload Window query from Server to Storage
 
+Server is known to Storage and signs this query
+
+The eddsa_pk is the one associated to the Client Agent who has made the Upload Request
+
 ```
 type UploadWindow {
-	pk: Base58!
+	eddsa_pk: Base58!
 	expiry: DateTime!  # decided by Server
 	{ File:: }         # sent by Server
 }
 ```
 
 ### Upload query from Client to Storage
+
+The Client is unknown to storage, its public key was communicated by the Server
 
 ```
 type Upload {
@@ -113,6 +119,8 @@ type Upload {
 ```
 
 ### Stored data inside Storage
+
+The Storage will end up saving this data associated to a hash in url
 
 ```
 type File {
@@ -127,6 +135,8 @@ type File {
   bin: Base64!
 }
 ```
+
+## Upload Sequence Diagram
 
 Upload sequence to the File Storage service (same server or separate CDN)
 
