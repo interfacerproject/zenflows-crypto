@@ -73,7 +73,9 @@ autonumber
 
 ## File upload
 
-### File field (GraphQL)
+Detail of each query
+
+### Upload Request query from Client to Server
 
 ```
 type File {
@@ -89,23 +91,40 @@ type File {
 }
 ```
 
-### Upload field (Key/Value)
+### Upload Window query from Server to Storage
 
 ```
 type UploadWindow {
 	pk: Base64!
-	expiry: DateTime!
+	expiry: DateTime!  # decided by Server
 	{ File:: }         # sent by Server
+}
 ```
 
-### Storage field (Key/Value)
+### Upload query from Client to Storage
 
 ```
 type Upload {
 	hash: Base64!         # header
 	signature: Base64!    # header
-	uploadDate: DateTime! # Storage fills after upload
 	bin: Base64!          # multi-part body
+	uploadDate: DateTime! # Storage fills after upload
+}
+```
+
+### Stored data inside Storage
+
+```
+type File {
+  hash: Base64!        # sha512
+  name: String!
+  description: String!
+  date: DateTime!
+  uploadDate: DateTime!
+  mimeType: String!
+  extension: String!
+  size: Integer!
+  bin: Base64!
 }
 ```
 
