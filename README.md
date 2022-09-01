@@ -73,7 +73,7 @@ autonumber
 
 ## File upload
 
-File field (GraphQL)
+### File field (GraphQL)
 
 ```
 type File {
@@ -85,10 +85,37 @@ type File {
   extension: String!
   size: Integer!
   uploader: Agent!
-  signature: String!
+  signature: Base64!
   width: Integer
   height: Integer
-  bin: Base64          # uploaded async
+  # bin: Base64        # uploaded async
+}
+```
+
+### Upload field (Key/Value)
+
+```
+type UploadWindow {
+	pk: Base64!
+	expiry: DateTime!
+	# sent by Server
+	hash: Base64!
+	mimeType: String!
+	extension: String!
+	size: Integer!
+```
+
+### Storage field (Key/Value)
+
+```
+type File {
+	hash: Base64!
+	name: String!
+	date: DateTime! # Storage fills after upload
+	mimeType: String!
+	extension: String!
+	size: String!
+	bin: Base64!
 }
 ```
 
@@ -100,8 +127,9 @@ autonumber
   participant C as 📱Client
   participant S as 🐧Server
   participant F as 💽Storage
-  C->>S: Mutate (GQL) adds File:: without ::bin
-  S->>F: Sign ::hash ::size ::mime as accepted for upload
+  C->>S: Mutate (GQL) adds File:: with ::signature of ::hash
+  S->>S: Associate uploader Agent to public key (::pk)
+  S->>F: Marks ::hash ::size ::mime ::pk as accepted for upload
   C->>F: Upload ::bin in body with ::hash in header
   F->>F: Check ::hash and ::size
   C->>F: Allow upload until verified ::size
