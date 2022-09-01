@@ -85,9 +85,6 @@ type File {
   extension: String!
   size: Integer!
   uploader: Agent!
-  signature: Base64!
-  width: Integer
-  height: Integer
   # bin: Base64        # uploaded async
 }
 ```
@@ -98,24 +95,17 @@ type File {
 type UploadWindow {
 	pk: Base64!
 	expiry: DateTime!
-	# sent by Server
-	hash: Base64!
-	mimeType: String!
-	extension: String!
-	size: Integer!
+	{ File:: }         # sent by Server
 ```
 
 ### Storage field (Key/Value)
 
 ```
-type File {
-	hash: Base64!
-	name: String!
-	date: DateTime! # Storage fills after upload
-	mimeType: String!
-	extension: String!
-	size: String!
-	bin: Base64!
+type Upload {
+	hash: Base64!         # header
+	signature: Base64!    # header
+	uploadDate: DateTime! # Storage fills after upload
+	bin: Base64!          # multi-part body
 }
 ```
 
@@ -127,12 +117,12 @@ autonumber
   participant C as 📱Client
   participant S as 🐧Server
   participant F as 💽Storage
-  C->>S: Mutate (GQL) adds File:: with ::signature of ::hash
-  S->>S: Associate uploader Agent to public key (::pk)
-  S->>F: Marks ::hash ::size ::mime ::pk as accepted for upload
-  C->>F: Upload ::bin in body with ::hash in header
-  F->>F: Check ::hash and ::size
-  C->>F: Allow upload until verified ::size
+  C->>S: Mutate (GQL) requesting upload of File::
+  S->>S: Associate uploader Agent to public key (::eddsa_pk)
+  S->>F: Marks File:: plus ::eddsa_pk accepted for upload on ::expiry
+  C->>F: Upload ::bin in body with ::hash ::signature in header
+  F->>F: Check ::hash ::signature and ::size
+  C->>F: Allow upload until ::size
   F->>F: Check matching ::hash of uploaded ::bin
   F->>C: Serve File::bin as :mime content of ::hash URI
 ```
