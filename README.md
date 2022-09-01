@@ -80,14 +80,14 @@ Detail of each query
 Uploader Agent is known by the Server and Client signs this query
 
 ```
-UploadRequest{
+UploadRequest {
     hash: Url64!         # sha512
     name: String!
     description: String
     date: DateTime
     mimeType: String!
     extension: String!
-    size: Integer!
+    size: Integer!       # bytes
 }
 ```
 
@@ -98,7 +98,7 @@ Server is known to Storage and signs this query
 The eddsa_pk is the one associated to the Client Agent who has made the Upload Request
 
 ```
-type UploadWindow {
+UploadWindow {
 	eddsa_pk: Base58!
 	expiry: DateTime!  # decided by Server
 	{ File:: }         # sent by Server
@@ -110,11 +110,10 @@ type UploadWindow {
 The Client is unknown to storage, its public key was communicated by the Server
 
 ```
-type Upload {
+Upload {
 	hash: Url64!         # header
-	signature: Base58!    # header
-	bin: Base64!          # multi-part body
-	uploadDate: DateTime! # Storage fills after upload
+	signature: Base58!   # header
+	bin: Base64!         # multi-part body
 }
 ```
 
@@ -123,15 +122,15 @@ type Upload {
 The Storage will end up saving this data associated to a hash in url
 
 ```
-type File {
-  hash: Url64!        # sha512
+File {
+  hash: Url64!          # sha512
   name: String!
   description: String
-  date: DateTime!
-  uploadDate: DateTime!
+  date: DateTime
+  uploadDate: DateTime! # Storage fills after upload
   mimeType: String!
   extension: String!
-  size: Integer!
+  size: Integer!        # bytes
   bin: Base64!
 }
 ```
