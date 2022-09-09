@@ -7,7 +7,7 @@ Given I have a 'keyring'
 
 # Fix Apollo's mingling with query string
 When I remove spaces in 'gql'
-and I remove newlines in 'gql'
+and I compact ascii strings in 'gql'
 
 When I create the eddsa signature of 'gql'
 And I create the hash of 'gql'
