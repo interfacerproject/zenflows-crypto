@@ -8,7 +8,7 @@ v_gqlsigned='{"eddsa_signature":"/iQGPGejtTiGTOpGSAlbV3yMoCXZZ4ybjYkxK57e7AQjt6N
 
 
 
-
+v_gql_query_signed='{"eddsa_signature":"yyGpoPYg27iULN6yw4mpqVLr26/GdpfVPyJkPabqlIaJ5tuXwNm2jWnUpKmlNnmO0xdZ9n16k2IOaGWp1mOZAw==","gql":"cXVlcnkoJGZpcnN0OkludCwkYWZ0ZXI6SUQsJGxhc3Q6SW50LCRiZWZvcmU6SUQsJGZpbHRlcjpFY29ub21pY1Jlc291cmNlRmlsdGVyUGFyYW1zKXtlY29ub21pY1Jlc291cmNlcyhmaXJzdDokZmlyc3QsYWZ0ZXI6JGFmdGVyLGJlZm9yZTokYmVmb3JlLGxhc3Q6JGxhc3QsZmlsdGVyOiRmaWx0ZXIpe3BhZ2VJbmZve3N0YXJ0Q3Vyc29yZW5kQ3Vyc29yaGFzUHJldmlvdXNQYWdlaGFzTmV4dFBhZ2V0b3RhbENvdW50cGFnZUxpbWl0fWVkZ2Vze2N1cnNvcm5vZGV7Y29uZm9ybXNUb3tpZG5hbWV9Y3VycmVudExvY2F0aW9ue2lkbmFtZW1hcHBhYmxlQWRkcmVzc31pZG5hbWVub3RlbWV0YWRhdGFva2h2cmVwb3ZlcnNpb25saWNlbnNvcmxpY2Vuc2VwcmltYXJ5QWNjb3VudGFibGV7aWRuYW1lbm90ZX1jdXN0b2RpYW57aWRuYW1lbm90ZX1hY2NvdW50aW5nUXVhbnRpdHl7aGFzVW5pdHtpZGxhYmVsc3ltYm9sfWhhc051bWVyaWNhbFZhbHVlfW9uaGFuZFF1YW50aXR5e2hhc1VuaXR7aWRsYWJlbHN5bWJvbH1oYXNOdW1lcmljYWxWYWx1ZX19fX19e3ZhcmlhYmxlczp7bGFzdDoxMCxmaWx0ZXI6e3ByaW1hcnlBY2NvdW50YWJsZTpbIjA2MUtGRTFBQURYTkRZVFhSWVRHMDA3QTE0Il19fX0=","hash":"d48385f8692ae2a96573595f5386ab77a795d2c2dc3eb233e7fac1b5b0126766"}'
 
 gql=`mktemp`
 gqljson=`mktemp`
@@ -81,6 +81,115 @@ cat <<EOF > ${gqljson}
 {"gql":"`cat ${gql64}`"}
 EOF
 
-# clean vectors
-rm -f ${gql} ${gql64}
+gql2json() {
+	local gql=`mktemp`
+	local gql64=`mktemp`
+	cat > $gql
+	cat ${gql} | base64 -w0 > ${gql64}
+	cat <<EOF
+{"gql":"`cat ${gql64}`"}
+EOF
+	# clean vectors
+	rm -f ${gql} ${gql64}
+}
 
+gql_mutation=`mktemp`
+cat <<EOF | gql2json > ${gql_mutation}
+mutation {
+  createEconomicEvent(
+    event: {
+      action: "produce"
+      provider: "01FWN12XX7TJX1AFF5KA4WPNN9" # bob
+      receiver: "01FWN12XX7TJX1AFF5KA4WPNN9" # bob
+      outputOf: "01FWN136SPDMKWWF23SWQZRM5F" # harvesting apples process
+      resourceConformsTo: "01FWN136Y4ZZ7K9F314HQ7MKRG" # apple
+      resourceQuantity: {
+        hasNumericalValue: 50
+        hasUnit: "01FWN136S5VPCCR3B3TGYDYEY9" # kilogram
+      }
+      atLocation: "01FWN136ZAPQ5ENBF3FZ79935D" # bob's farm
+      hasPointInTime: "2022-01-02T03:04:05Z"
+    }
+    newInventoriedResource: {
+      name: "bob's apples"
+      note: "bob's delish apples"
+      trackingIdentifier: "lot 123"
+      currentLocation: "01FWN136ZAPQ5ENBF3FZ79935D" # bob's farm
+      stage: "01FWN136X183DM43CTWXESNWAB" # fresh
+    }
+  ) {
+    economicEvent {
+      id
+      action {id}
+      provider {id}
+      receiver {id}
+      outputOf {id}
+      resourceConformsTo {id}
+      resourceQuantity {
+        hasNumericalValue
+        hasUnit {id}
+      }
+      atLocation {id}
+      hasPointInTime
+    }
+    economicResource { # this is the newly-created resource
+      id
+      name
+      note
+      trackingIdentifier
+      stage {id}
+      currentLocation {id}
+      conformsTo {id}
+      primaryAccountable {id}
+      custodian {id}
+      accountingQuantity {
+        hasNumericalValue
+        hasUnit {id}
+      }
+      onhandQuantity {
+        hasNumericalValue
+        hasUnit {id}
+      }
+    }
+  }
+}
+EOF
+
+gql_query=`mktemp`
+
+echo 'query($first: Int, $after: ID, $last: Int, $before: ID, $filter: EconomicResourceFilterParams) {
+  economicResources(first: $first, after: $after, before: $before, last: $last, filter: $filter) {
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+      totalCount
+      pageLimit
+    }
+    edges {
+      cursor
+      node {
+        conformsTo {
+          id
+          name
+        }
+        currentLocation {id name mappableAddress}
+        id
+        name
+        note
+        metadata
+        okhv
+        repo
+        version
+        licensor
+        license
+        primaryAccountable {id name note}
+        custodian {id name note}
+        accountingQuantity {hasUnit{id label symbol} hasNumericalValue}
+        onhandQuantity {hasUnit{id label symbol} hasNumericalValue}
+      }
+    }
+  }
+}
+{ variables: { last: 10, filter: { primaryAccountable: ["061KFE1AADXNDYTXRYTG007A14"]}}}' | gql2json > ${gql_query}

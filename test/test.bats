@@ -70,16 +70,30 @@ EOF
     assert_output "${v_keyring}"
 }
 
-@test "Sign GraphQL" {
+@test "Sign GraphQL mutation" {
     assert_file_not_empty $TMP/keyring.json
-    zexe $SRC/sign_graphql ${gqljson} $TMP/keyring.json
+    zexe $SRC/sign_graphql ${gql_mutation} $TMP/keyring.json
     assert_output "${v_gqlsigned}"
     save_output $TMP/gqlsigned.json
 }
 
-@test "Verify GraphQL" {
+@test "Verify GraphQL mutation" {
     assert_file_not_empty $TMP/gqlsigned.json
     zexe $SRC/verify_graphql $TMP/gqlsigned.json $TMP/keyring.json
+    assert_output '{"output":["1"]}'
+}
+
+
+@test "Sign GraphQL query" {
+    assert_file_not_empty $TMP/keyring.json
+    zexe $SRC/sign_graphql ${gql_query} $TMP/keyring.json
+    assert_output "${v_gql_query_signed}"
+    save_output $TMP/gql_query_signed.json
+}
+
+@test "Verify GraphQL query" {
+    assert_file_not_empty $TMP/gql_query_signed.json
+    zexe $SRC/verify_graphql $TMP/gql_query_signed.json $TMP/keyring.json
     assert_output '{"output":["1"]}'
 }
 
