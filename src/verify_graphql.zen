@@ -20,9 +20,6 @@ Given I have a 'base58' named 'eddsa public key'
 # and I create the count of char ']' found in 'graphql'
 # and I verify 'count' is equal to 'open'
 
-# Fix Apollo's mingling with query string
-When I remove spaces in 'gql'
-and I compact ascii strings in 'gql'
 When I verify the 'gql' has a eddsa signature in 'eddsa signature' by 'eddsa public key'
 
 Then print the string '1'
