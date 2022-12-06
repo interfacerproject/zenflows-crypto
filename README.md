@@ -188,7 +188,7 @@ sequenceDiagram
     participant WS as Zenflows
     C->>WS: Sign Open Session
     WS->>FA: Forward Signed Open Session from Client
-    FA->>DID: Client PK verification (refresh, still valid)
+    FA->>FA: Client PK verification (public DID)
     FA->>WS: Session token - foreach req
     WS->>C: Session token
     C->>+WS: Sign token + counter + API req
