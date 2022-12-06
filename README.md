@@ -172,7 +172,48 @@ The Storage has the public key of the server, not that of clients, which simplif
 Any Client may hit the upload API endpoint of Storage without signaing, verification is made on expiring key/value of hash and size.
 
 
+## FabAccess communication
 
+This section illustrates the communication protocol with the [FabAccess API](https://gitlab.com/fabinfra/fabaccess/fabaccess-api) implemented in [BFFHD](https://gitlab.com/fabinfra/fabaccess/bffh) to authenticate users and allow them to execute commands on connected Fab machines within an authenticated session.
+
+### FabAccess Sequence Diagram
+
+The Zenflows federated instance operates in a trustless way and leverages our W3C-DID as authentication trust anchor (client public keys).
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant FA as Fabaccess
+    participant C as Client
+    participant WS as Zenflows
+    C->>WS: Sign Open Session
+    WS->>FA: Forward Signed Open Session from Client
+    FA->>DID: Client PK verification (refresh, still valid)
+    FA->>WS: Session token - foreach req
+    WS->>C: Session token
+    C->>+WS: Sign token + counter + API req
+    WS->>FA: Forward signed token + counter + API req
+    FA->>FA: Verify session and exec req
+    FA->>WS: Return req execution result
+    WS->>-C: Report result
+    C->>WS: Sign end session or timeout
+    WS->>FA: Signed token end session
+```
+
+### Notes
+
+1. Clients may sign a request to open a FabAccess session
+2. Zenflows may verify then forward the request to FabAccess
+3. Fabaccess verifies the request using the PK found on DID
+4. SESSION START: Fabaccess sends a session token to Zenflows
+5. Zenflows forwards the session token to the Client
+6. ITER: Client signs the token + a FabAccesss API request
+7. ITER: Zenflows forwards to FabAccess the signed tok+API+count
+8. ITER: Fabaccess verifies the signed tok+API+count and executes
+9. ITER: Fabaccess describes execution / returns results
+10. ITER: Results are forwarded to the Client
+11. Client may request end of session
+12. Zenflows signals the end of session or timeout
 
 
 ## 💼 License
