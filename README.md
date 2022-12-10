@@ -183,9 +183,9 @@ The Zenflows federated instance operates in a trustless way and leverages our W3
 ```mermaid
 sequenceDiagram
     autonumber
-    participant FA as Fabaccess
     participant C as Client
     participant WS as Zenflows
+    participant FA as Fabaccess
     C->>WS: Sign Open Session
     WS->>FA: Forward Signed Open Session from Client
     FA->>FA: Client PK verification (public DID)
