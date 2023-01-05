@@ -5,9 +5,7 @@ const keypairoomClient = () => {
 Scenario 'ecdh': Create the key
 Scenario 'ethereum': Create key
 Scenario 'reflow': Create the key
-Scenario 'schnorr': Create the key
 Scenario 'eddsa': Create the key
-Scenario 'qp': Create the key
 
 
 # Loading the user name from data
@@ -60,7 +58,7 @@ When I create the hash of 'seed.ethereum'
 When I rename the 'hash' to 'seed.reflow'
 
 When I create the hash of 'seed.reflow'
-When I rename the 'hash' to 'seed.schnorr'
+When I rename the 'hash' to 'seed.bitcoin'
 
 # end of the sorted creation flow
 
@@ -68,55 +66,53 @@ When I create the ecdh key with secret key 'seed.ecdh'
 When I create the eddsa key with secret key 'seed.eddsa'
 When I create the ethereum key with secret key 'seed.ethereum'
 When I create the reflow key with secret key 'seed.reflow'
-When I create the schnorr key with secret key 'seed.schnorr'
+When I create the bitcoin key with secret key 'seed.bitcoin'
 
 When I create the ecdh public key
 When I create the eddsa public key
 When I create the ethereum address
 When I create the reflow public key
-When I create the schnorr public key
+When I create the bitcoin public key
 
 # Creating the hashes of the single challenges, to OPTIONALLY help 
 # regeneration of the keypair
 
-When I create the 'base64 dictionary'
-and I rename the 'base64 dictionary' to 'hashedAnswers'
+# When I create the 'base64 dictionary'
+# and I rename the 'base64 dictionary' to 'hashedAnswers'
 
-When I create the key derivation of 'whereParentsMet'
-and I rename the 'key derivation' to 'whereParentsMet.kdf'
-When I insert 'whereParentsMet.kdf' in 'hashedAnswers'
+# When I create the key derivation of 'whereParentsMet'
+# and I rename the 'key derivation' to 'whereParentsMet.kdf'
+# When I move 'whereParentsMet.kdf' in 'hashedAnswers'
 
-When I create the key derivation of 'nameFirstPet'
-and I rename the 'key derivation' to 'nameFirstPet.kdf'
-When I insert 'nameFirstPet.kdf' in 'hashedAnswers'
+# When I create the key derivation of 'nameFirstPet'
+# and I rename the 'key derivation' to 'nameFirstPet.kdf'
+# When I move 'nameFirstPet.kdf' in 'hashedAnswers'
 
-When I create the key derivation of 'whereHomeTown'
-and I rename the 'key derivation' to 'whereHomeTown.kdf'
-When I insert 'whereHomeTown.kdf' in 'hashedAnswers'
+# When I create the key derivation of 'whereHomeTown'
+# and I rename the 'key derivation' to 'whereHomeTown.kdf'
+# When I move 'whereHomeTown.kdf' in 'hashedAnswers'
 
-When I create the key derivation of 'nameFirstTeacher'
-and I rename the 'key derivation' to 'nameFirstTeacher.kdf'
-When I insert 'nameFirstTeacher.kdf' in 'hashedAnswers'
+# When I create the key derivation of 'nameFirstTeacher'
+# and I rename the 'key derivation' to 'nameFirstTeacher.kdf'
+# When I move 'nameFirstTeacher.kdf' in 'hashedAnswers'
 
-When I create the key derivation of 'nameMotherMaid'
-and I rename the 'key derivation' to 'nameMotherMaid.kdf'
-When I insert 'nameMotherMaid.kdf' in 'hashedAnswers'
-
-
-# This prints the keyring
-Then print the 'keyring' 
+# When I create the key derivation of 'nameMotherMaid'
+# and I rename the 'key derivation' to 'nameMotherMaid.kdf'
+# When I move 'nameMotherMaid.kdf' in 'hashedAnswers'
 
 # this prints the hashes of the challenges
 # Then print the 'hashedAnswers'
 
+Then print the 'keyring' 
+
 # This prints the seed for the private keys as mnemonic 
 Then print the 'seed' as 'mnemonic'
 
-Then print the 'ecdh public key'
-Then print the 'eddsa public key'
+Then print the 'ecdh public key' as 'base58'
+Then print the 'eddsa public key' as 'base58'
 Then print the 'ethereum address'
-Then print the 'reflow public key'
-Then print the 'schnorr public key'
+Then print the 'reflow public key' as 'base58'
+Then print the 'bitcoin public key' as 'base58'
 
 `}
 

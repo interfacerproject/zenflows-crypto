@@ -5,7 +5,6 @@ const keypairoomClientRecreateKeys = () => {
 Scenario 'ecdh': Create the key
 Scenario 'ethereum': Create key
 Scenario 'reflow': Create the key
-Scenario 'schnorr': Create the key
 Scenario 'eddsa': Create the key
 
 # here we load the seed as a mnemonic
@@ -27,30 +26,30 @@ When I rename the 'hash' to 'seed.ethereum'
 When I create the  hash  of 'seed.ethereum'
 When I rename the 'hash' to 'seed.reflow'
 When I create the  hash  of 'seed.reflow'
-When I rename the 'hash' to 'seed.schnorr'
+When I rename the 'hash' to 'seed.bitcoin'
 
 When I create the ecdh key with secret key 'seed.ecdh'
 When I create the eddsa key with secret key 'seed.eddsa'
 When I create the ethereum key with secret key 'seed.ethereum'
 When I create the reflow key with secret key 'seed.reflow'
-When I create the schnorr key with secret key 'seed.schnorr'
+When I create the bitcoin key with secret key 'seed.bitcoin'
 
 # PKs generation
 When I create the ecdh public key
 When I create the eddsa public key
 When I create the ethereum address
 When I create the reflow public key
-When I create the schnorr public key
+When I create the bitcoin public key
 
 # This prints the keyring containing the SKs
 Then print the 'keyring'
 
 # This prints the PKs, one object each
-Then print the 'ecdh public key'
-Then print the 'eddsa public key'
+Then print the 'ecdh public key' as 'base58'
+Then print the 'eddsa public key' as 'base58'
 Then print the 'ethereum address'
-Then print the 'reflow public key'
-Then print the 'schnorr public key'
+Then print the 'reflow public key' as 'base58'
+Then print the 'bitcoin public key' as 'base58'
 
 # This prints the seed for the private keys as mnemonic 
 Then print the 'seed' as 'mnemonic'
