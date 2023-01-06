@@ -9,7 +9,7 @@ Scenario reflow
 
 # timestamp in messages to avoid replay attack
 #Given I fetch the local timestamp and store it into 'timestamp'
-Given I have a 'string' named 'timestamp'
+and I have a 'string' named 'timestamp'
 
 # load the spec admin keyring to sign the request
 Given my name is in a 'string' named 'controller'
@@ -19,11 +19,12 @@ and I have my 'keyring'
 Given I have a 'string array' named '@context'
 
 # load the new identity public keys and description
-Given I have a 'string' named 'specific_id'
-Given I have a 'string' named 'signer_specific_id'
+Given I have a 'string' named 'did_spec'
+Given I have a 'string' named 'signer_did_spec'
 Given I have a 'string' named 'identity'
 and I rename 'identity' to 'description'
-Given I have a 'eddsa_public_key'
+Given I have a 'string dictionary' named 'ifacer_id'
+and I have a 'eddsa_public_key'
 and I rename 'eddsa_public_key' to 'identity pk'
 Given I have a 'ethereum_address'
 Given I have a 'ecdh_public_key'
@@ -36,10 +37,13 @@ Given I have a 'base58' named 'bitcoin public key'
 When I create the 'string dictionary' named 'did document'
 and I move '@context' in 'did document'
 and I move 'description' in 'did document'
+If 'identifier' is found in 'ifacer_id'
+When I move 'identifier' from 'ifacer_id' to 'did document'
+EndIf
 
 ## did spec and id
 When I set 'did:dyne:' to 'did:dyne:' as 'string'
-and I append 'specific_id' to 'did:dyne:'
+and I append 'did_spec' to 'did:dyne:'
 and I append the string ':' to 'did:dyne:'
 and I append the 'base58' of 'identity pk' to 'did:dyne:'
 and I copy the 'did:dyne:' to 'id' in 'did document'
@@ -135,7 +139,7 @@ When I move 'verificationMethod' in 'did document'
 
 # did document signature
 When I create the json of 'did document'
-When I create the ecdh signature of 'json'
+and I create the ecdh signature of 'json'
 and I remove 'json'
 
 # result signature
@@ -147,8 +151,8 @@ and I create the eddsa signature of 'json'
 
 # signer id
 When I create the eddsa public key
-When I set 'id' to 'did:dyne:' as 'string'
-and I append 'signer_specific_id' to 'id'
+and I set 'id' to 'did:dyne:' as 'string'
+and I append 'signer_did_spec' to 'id'
 and I append the string ':' to 'id'
 and I append the 'base58' of 'eddsa public key' to 'id'
 
