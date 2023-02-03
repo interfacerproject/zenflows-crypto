@@ -1,0 +1,16 @@
+Scenario 'eddsa': open fabaccess session
+
+Given I have a 'string' named 'timestamp'
+Given I have a 'string' named 'command'
+Given I have a 'eddsa public key'
+Given I have a 'eddsa signature'
+
+When I write string ':' in ':'
+
+When I copy 'command' to 'comando completo'
+When I append ':' to 'comando completo'
+When I append 'timestamp' to 'comando completo'
+
+When I verify the 'comando completo' has a eddsa signature in 'eddsa signature' by 'eddsa public key'
+
+Then print the string 'ok'

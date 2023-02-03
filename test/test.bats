@@ -138,3 +138,29 @@ EOF
    zexe $SRC/verify_file $TMP/hashfile.json $TMP/pk_sig.json
    assert_output '{"output":["signature_is_valid"]}'
 }
+
+@test "Sign open fabaccess session" {
+    echo '{"timestamp": "12345678"}' >$TMP/timestamp.json
+    assert_file_not_empty $TMP/keyring.json
+    zexe $SRC/sign_fabaccess_open $TMP/timestamp.json $TMP/keyring.json
+    assert_output '{"command":"OPEN","eddsa_public_key":"BmW1a6x43P4Rae9B4hS67PhHTCUShXAGy4K8tQtUfa8L","eddsa_signature":"bVcKGC9qDGgXJTvodXKTDqoBfm1rLbaYYuhKezsykr2WLm9J1dyHfEZzPNYa7ynPTG2xJmtfk14ZhjHb4pnDecF","timestamp":"12345678"}'
+    save_output $TMP/fabaccess_open_signature.json
+}
+
+@test "Verify open fabaccess session" {
+    zexe $SRC/verify_fabaccess_open $TMP/fabaccess_open_signature.json
+    assert_output '{"output":["ok"]}'
+}
+
+@test "Sign fabaccess command" {
+    echo '{"command": "CLOSE", "service": "shutdown", "counter": 42, "token": "ZmFiYWNjZXNzIHRva2Vu"}' >$TMP/fab_cmd.json
+    assert_file_not_empty $TMP/keyring.json
+    zexe $SRC/sign_fabaccess_cmd $TMP/fab_cmd.json $TMP/keyring.json
+    assert_output '{"command":"CLOSE","counter":42,"eddsa_public_key":"BmW1a6x43P4Rae9B4hS67PhHTCUShXAGy4K8tQtUfa8L","eddsa_signature":"siBQckCLxQ5emaJsxTdxBxZ6mcziEgGyXLYNbXNaNe8Qc7p5NEwHPgeZ7YGGdzTWu6FZG2cEfuZjDuBzWe4EVzG","service":"shutdown","token":"ZmFiYWNjZXNzIHRva2Vu"}'
+    save_output $TMP/fabaccess_cmd_signature.json
+}
+
+@test "Verify fabaccess command" {
+    zexe $SRC/verify_fabaccess_cmd $TMP/fabaccess_cmd_signature.json
+    assert_output '{"output":["ok"]}'
+}

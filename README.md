@@ -184,7 +184,7 @@ The Zenflows federated instance operates in a trustless way and leverages our W3
 sequenceDiagram
     autonumber
     participant C as Client
-    participant WS as Zenflows
+    participant WS as Interfacer-proxy
     participant FA as Fabaccess
     C->>WS: Sign Open Session
     WS->>FA: Forward Signed Open Session from Client
@@ -215,6 +215,50 @@ sequenceDiagram
 11. Client may request end of session
 12. Zenflows signals the end of session or timeout
 
+#### Packet schema
+Now we describe the structure of packets sent from the client using the provided zencode.
+
+#### (1) Sign Open Session
+To open a session the zencode requires the signature of the current timestamp (to prevent _replay attacks_)
+```
+{
+	"timestamp": "1234567"
+}
+```
+The return value is a dictionary with: the command (`OPEN`), the identity, the signature and the timestamp. E.g.
+```
+{
+  "command": "OPEN",
+  "eddsa_public_key": "EdDja2UdyPPEduFhXLEzzRHuW9TdaG7g16oVFAXWYvHt",
+  "eddsa_signature": "4YApLBq9KMytJZmcRUdU2Ltn6QqLiDCPWshziBJymeP88vRg63VNWL19PM8TxZjcQvkBU6g7ABmwXdCyPnzWsNjM",
+  "timestamp": "1234567"
+}
+```
+
+We are signing the string `"OPEN:<timestamp>"`
+
+#### (6,11) Send command
+The supported commands are `ON`, `OFF`, `CLOSE`. The `service` key descrive the resource we want to change the state of, in case of the `CLOSE` command it must be the string `"shutdown"`. We assume the client keeps as state a counter, which will be put in every request.  E.g.
+```
+{
+  "token": "ZmFiYWNjZXNzIHRva2Vu",
+  "command": "CLOSE",
+  "service": "shutdown",
+  "counter": 42
+}
+```
+The value that will have to be sent is analogous to the previous one
+```
+{
+  "command": "CLOSE",
+  "counter": 42,
+  "eddsa_public_key": "2fxc6VgyXhAzuqvsHPHmNkG3MSJJNQgZwLSEByNsa9DN",
+  "eddsa_signature": "KzuN4JXLmYXWfJAkpNB2yNYXC2VtSYASjnQKAU6VAmSwzKXjtuuUXmd3Q8RJEgShiR6MRijCHTAHZYDLzHAeKLZ",
+  "service": "shutdown",
+  "token": "ZmFiYWNjZXNzIHRva2Vu"
+}
+```
+We are signing the string `"<command>:<counter>:<token>:<service>"`
 
 ## 💼 License
 
