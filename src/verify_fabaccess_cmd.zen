@@ -1,0 +1,23 @@
+Scenario 'eddsa': sign fabaccess command
+
+Given I have a 'integer' named 'counter'
+Given I have a 'string' named 'command'
+Given I have a 'string' named 'service'
+Given I have a 'base64' named 'token'
+
+Given I have a 'eddsa public key'
+Given I have a 'eddsa signature'
+
+When I write string ':' in ':'
+
+When I copy 'command' to 'comando completo'
+When I append ':' to 'comando completo'
+When I append 'counter' to 'comando completo'
+When I append ':' to 'comando completo'
+When I append 'token' to 'comando completo'
+When I append ':' to 'comando completo'
+When I append 'service' to 'comando completo'
+
+When I verify the 'comando completo' has a eddsa signature in 'eddsa signature' by 'eddsa public key'
+
+Then print the string 'ok'

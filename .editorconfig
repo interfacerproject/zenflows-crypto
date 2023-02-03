@@ -1,0 +1,16 @@
+# Copyright 2017-2023 Dyne.org foundation
+# SPDX-FileCopyrightText: 2017-2021 Dyne.org foundation
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+
+[Makefile]
+indent_style = tab
+
+[test/*.bats]
+indent_style = space
+indent_size = 4
