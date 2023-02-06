@@ -238,24 +238,24 @@ The return value is a dictionary with: the command (`OPEN`), the identity, the s
 We are signing the string `"OPEN:<timestamp>"`
 
 #### (6,11) Send command
-The supported commands are `ON`, `OFF`, `CLOSE`. The `service` key descrive the resource we want to change the state of, in case of the `CLOSE` command it must be the string `"shutdown"`. We assume the client keeps as state a counter, which will be put in every request.  E.g.
+The supported commands are `ON`, `OFF`, `CLOSE`. The `service` key descrive the resource we want to change the state of, in case of the `CLOSE` command it must be the string `"shutdown"`. E.g.
 ```
 {
   "token": "ZmFiYWNjZXNzIHRva2Vu",
   "command": "CLOSE",
   "service": "shutdown",
-  "counter": 42
+  "timestamp": 1234567 
 }
 ```
 The value that will have to be sent is analogous to the previous one
 ```
 {
-  "command": "CLOSE",
-  "counter": 42,
-  "eddsa_public_key": "2fxc6VgyXhAzuqvsHPHmNkG3MSJJNQgZwLSEByNsa9DN",
-  "eddsa_signature": "KzuN4JXLmYXWfJAkpNB2yNYXC2VtSYASjnQKAU6VAmSwzKXjtuuUXmd3Q8RJEgShiR6MRijCHTAHZYDLzHAeKLZ",
-  "service": "shutdown",
-  "token": "ZmFiYWNjZXNzIHRva2Vu"
+  "command":"CLOSE",
+  "eddsa_public_key":"BmW1a6x43P4Rae9B4hS67PhHTCUShXAGy4K8tQtUfa8L",
+  "eddsa_signature":"2wCGyeAmaLmgkJPFdCEig5khWYmSeGrEHnnmMDS4Ysm62o544p1ucJUL7VXDX6ko6zae4NTFKtgyb2HrwtwkMpEr",
+  "service":"shutdown",
+  "timestamp":"123456",
+  "token":"ZmFiYWNjZXNzIHRva2Vu"
 }
 ```
 We are signing the string `"<command>:<counter>:<token>:<service>"`

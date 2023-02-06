@@ -1,6 +1,6 @@
 Scenario 'eddsa': sign fabaccess command
 
-Given I have a 'integer' named 'counter'
+Given I have a 'integer' named 'timestamp'
 Given I have a 'string' named 'command'
 Given I have a 'string' named 'service'
 Given I have a 'base64' named 'token'
@@ -12,7 +12,7 @@ When I write string ':' in ':'
 
 When I copy 'command' to 'comando completo'
 When I append ':' to 'comando completo'
-When I append 'counter' to 'comando completo'
+When I append 'timestamp' to 'comando completo'
 When I append ':' to 'comando completo'
 When I append 'token' to 'comando completo'
 When I append ':' to 'comando completo'
