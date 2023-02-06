@@ -153,10 +153,10 @@ EOF
 }
 
 @test "Sign fabaccess command" {
-    echo '{"command": "CLOSE", "service": "shutdown", "counter": 42, "token": "ZmFiYWNjZXNzIHRva2Vu"}' >$TMP/fab_cmd.json
+    echo '{"command": "CLOSE", "service": "shutdown", "timestamp": "123456", "token": "ZmFiYWNjZXNzIHRva2Vu"}' >$TMP/fab_cmd.json
     assert_file_not_empty $TMP/keyring.json
     zexe $SRC/sign_fabaccess_cmd $TMP/fab_cmd.json $TMP/keyring.json
-    assert_output '{"command":"CLOSE","counter":42,"eddsa_public_key":"BmW1a6x43P4Rae9B4hS67PhHTCUShXAGy4K8tQtUfa8L","eddsa_signature":"siBQckCLxQ5emaJsxTdxBxZ6mcziEgGyXLYNbXNaNe8Qc7p5NEwHPgeZ7YGGdzTWu6FZG2cEfuZjDuBzWe4EVzG","service":"shutdown","token":"ZmFiYWNjZXNzIHRva2Vu"}'
+    assert_output '{"command":"CLOSE","eddsa_public_key":"BmW1a6x43P4Rae9B4hS67PhHTCUShXAGy4K8tQtUfa8L","eddsa_signature":"2wCGyeAmaLmgkJPFdCEig5khWYmSeGrEHnnmMDS4Ysm62o544p1ucJUL7VXDX6ko6zae4NTFKtgyb2HrwtwkMpEr","service":"shutdown","timestamp":"123456","token":"ZmFiYWNjZXNzIHRva2Vu"}'
     save_output $TMP/fabaccess_cmd_signature.json
 }
 
