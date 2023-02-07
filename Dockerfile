@@ -31,12 +31,10 @@ RUN npx -y create-restroom@next -a --no-@restroom-mw/sawroom --no-@restroom-mw/f
 ENV HTTP_PORT=3000
 ENV HTTPS_PORT=3301
 ENV OPENAPI=true
-# must end with a "/" in order for the COPY command below to work
-ENV FILES_DIR=./contracts/
 ENV CHAIN_EXT=chain
 ENV YML_EXT=yml
 
-COPY src/*.zen "$FILES_DIR"
+COPY src/*.zen contracts/
 
 # yarn install and run
-CMD yarn start
+CMD FLIES_DIR=./contracts yarn start
