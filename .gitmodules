@@ -10,3 +10,6 @@
 [submodule "test/test_helper/bats-file"]
 	path = test/test_helper/bats-file
 	url = https://github.com/bats-core/bats-file
+[submodule ".reuse"]
+	path = .reuse
+	url = https://github.com/interfacerproject/reuse

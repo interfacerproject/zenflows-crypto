@@ -3,6 +3,9 @@
 
 # git stuff
 !/.gitignore
+!/.gitmodules
+
+!/.reuse
 
 # build stuff
 !/Dockerfile
