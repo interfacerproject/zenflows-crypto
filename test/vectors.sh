@@ -1,3 +1,19 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (C) 2022-2023 Dyne.org foundation <foundation@dyne.org>.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 # example graphql with most allowed characters used
 
 v_keyring='{"bitcoin_public_key":"ukQvpps4nhSthRf1FLsEQGnYoZDYUJkfYY8Fr6wNgC41","ecdh_public_key":"NNnAfK9c2A8QJ2oNXPvy6779DdLXS6HYv9aBUGvKjFpLAAexTr46JyooXo6vdYHw7x5veYAxrHLiHkb4pcH1LFMu","eddsa_public_key":"BmW1a6x43P4Rae9B4hS67PhHTCUShXAGy4K8tQtUfa8L","ethereum_address":"4152bf951c86ba52cec089eae22cec506cd8b874","keyring":{"bitcoin":"KxDiAHPio8igFegwt6yX94vHywxYcApUxknEnqPHoLhh5qNuSozW","ecdh":"gHMNRNJrKavz/cqSus4qcIex/+z/5uZVStccaYpVXCY=","eddsa":"EmDKWxH78WxKzJpUvsC6RWVRDWeB4q8AceooYf7uVaRv","ethereum":"e43de93b08b950652cf154da16b3659f40709a8fd3831f2bbb6e5c054c348a7e","reflow":"whNys7dhBwmeFCaunYcqvuTCZg+rX+Sbhsylt6QuSvQ="},"reflow_public_key":"AX8cmFkKLcmMGYb6YfnqAVDgRAa5tiX4XSfzvKordckZguU7ZVQTWf95x9VnenwgBcyJgniVNKQDSkodhrfGc3z3BzDfUcFEMEJhcinkrFayPq2G51Cx85bFQqfUw9DgUK12dgGP7Utout9CdqdEr2nCqmBJ25UGcpsQbjRF2edbLQTx7r6tkghpgopQUepMDnpGJXU8m8vADB5dxyhZsSNjWoH28QDTCyiRsfeV2a4w8ACGpvPb2ZjDPqZw1AVa9BcG2b","seed":"arrow story season about lucky wedding weird vast verify route churn rally"}'
