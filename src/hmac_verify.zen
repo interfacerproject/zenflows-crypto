@@ -1,0 +1,8 @@
+Given I have a 'base64' named 'key'
+and I have a 'base64' named 'data'
+and I have a 'base64' named 'expected'
+
+When I create the HMAC of 'data' with key 'key'
+and I verify 'HMAC' is equal to 'expected'
+
+Then print the string '1'
