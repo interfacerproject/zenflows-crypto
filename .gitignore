@@ -27,6 +27,8 @@
 !/src/*/*/
 /src/*/*/*
 !/src/*/*/*/
+!/src/*.zen
+!/src/*.ts
 
 # tests
 !/test/
