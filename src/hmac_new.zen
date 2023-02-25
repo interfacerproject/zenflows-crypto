@@ -1,0 +1,6 @@
+Given I have a 'base64' named 'key'
+and I have a 'base64' named 'data'
+
+When I create the HMAC of 'data' with key 'key'
+
+Then print the 'HMAC' as 'base64'
