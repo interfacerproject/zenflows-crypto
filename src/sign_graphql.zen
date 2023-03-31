@@ -14,19 +14,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# This is the salt configured in the server installation
-# it is unique to the federated network of servers
-Given I have a 'base64' named 'serverSideSalt'
+Scenario eddsa: sign a graph query
+Given I have a 'base64' named 'gql'
+Given I have a 'keyring'
 
-# Loading the data that the user is entering at the signup. This data will be sent from the client to the server
-Given I have a 'string' named 'email' in 'userData'
+# Fix Apollo's mingling with query string
+When I remove spaces in 'gql'
+and I compact ascii strings in 'gql'
 
-# The server also checks email validity (RFC2047)
-When I verify 'email' is a email
+When I create the eddsa signature of 'gql'
+And I create the hash of 'gql'
 
-# Then creates a HMAC of the user data mixed with salt
-When I create the HMAC of 'email' with key 'serverSideSalt'
-When I rename the 'HMAC' to 'seedServerSideShard.HMAC'
-
-# Here we print the HMAC
-Then print the 'seedServerSideShard.HMAC'
+Then print the 'eddsa public key'
+Then print 'eddsa signature' as 'base64'
+Then print 'gql' as 'base64'
+Then print 'hash' as 'hex'
