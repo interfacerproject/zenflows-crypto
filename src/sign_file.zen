@@ -14,19 +14,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# This is the salt configured in the server installation
-# it is unique to the federated network of servers
-Given I have a 'base64' named 'serverSideSalt'
+Scenario eddsa: sign the hash of a binary file
+Given I have a 'url64' named 'hashedFile'
+Given I have a 'keyring'
 
-# Loading the data that the user is entering at the signup. This data will be sent from the client to the server
-Given I have a 'string' named 'email' in 'userData'
+When I create the hash of 'hashedFile'
+and I rename 'hash' to 'signed_hash'
+and I create the eddsa signature of 'signed_hash'
 
-# The server also checks email validity (RFC2047)
-When I verify 'email' is a email
-
-# Then creates a HMAC of the user data mixed with salt
-When I create the HMAC of 'email' with key 'serverSideSalt'
-When I rename the 'HMAC' to 'seedServerSideShard.HMAC'
-
-# Here we print the HMAC
-Then print the 'seedServerSideShard.HMAC'
+Then print 'eddsa signature'
+and print 'signed_hash' as 'url64'
