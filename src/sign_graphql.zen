@@ -16,6 +16,7 @@
 
 Scenario eddsa: sign a graph query
 Given I have a 'base64' named 'gql'
+Given I have the 'keyring'
 
 # Fix Apollo's mingling with query string
 When I remove spaces in 'gql'
