@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+Scenario eddsa: generate public key
 Given I have a 'keyring'
 
 When I create the eddsa public key
