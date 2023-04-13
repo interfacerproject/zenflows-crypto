@@ -86,6 +86,11 @@ EOF
     assert_output "${v_keyring}"
 }
 
+@test "Generate eddsa public key" {
+    zexe $SRC/gen_pubkey $TMP/keyring.json
+    assert_output "${v_pubkey}"
+}
+
 @test "Sign GraphQL mutation" {
     assert_file_not_empty $TMP/keyring.json
     zexe $SRC/sign_graphql ${gql_mutation} $TMP/keyring.json
