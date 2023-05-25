@@ -24,7 +24,7 @@ WORKDIR /app
 RUN apk add git python3 make g++
 
 # Installing restroom
-RUN npx -y create-restroom@next -a --no-@restroom-mw/sawroom --no-@restroom-mw/fabric .
+RUN npx -y create-restroom@next -a --no-@restroom-mw/sawroom --no-@restroom-mw/fabric --no-@restroom-mw/planetmint .
 
 # Configure restroom
 ENV HTTP_PORT=3000
