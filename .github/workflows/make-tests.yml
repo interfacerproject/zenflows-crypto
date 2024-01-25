@@ -28,11 +28,10 @@ jobs:
         with:
           submodules: recursive
       - name: Download latest zenroom binary
-        uses: supplypike/setup-bin@v1
-        with:
-          uri: 'https://files.dyne.org/zenroom/nightly/zenroom-linux-amd64'
-          name: 'zenroom'
-          version: '3.0.0-nightly'
+        run: |
+          wget https://github.com/dyne/zenroom/releases/latest/download/zenroom -O zenroom
+          chmod +x zenroom
+          sudo cp zenroom /usr/local/bin/zenroom
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - name: List files in the repository
