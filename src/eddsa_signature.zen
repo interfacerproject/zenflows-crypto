@@ -21,4 +21,4 @@ and I have a 'base64' named 'bytes'
 
 When I create the eddsa signature of 'bytes'
 
-Then print the 'eddsa signature'
+Then print the 'eddsa signature' as 'base64'
