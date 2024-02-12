@@ -1,0 +1,86 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (C) 2022-2023 Dyne.org foundation <foundation@dyne.org>.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+Scenario 'es256': sign
+
+Given I have a 'keyring'
+and I have a 'base64' named 'bytes'
+When I create the es256 signature of 'bytes'
+
+# DER encoding as hex
+# 30..total_length..02..r_length..r_final..02..s_length..s_final
+# where r_final and s_final are r and s padded with an initial 
+# 0 byte if first byte is grater than 0x7f
+
+# utility for der encoding
+When I set 'header' to '30' as 'string'
+and I set 'int_spec' to '02' as 'string'
+and I set 'r_length' to '32' as 'integer'
+and I set 's_length' to '32' as 'integer'
+and I set 'four' to '4' as 'integer'
+and I set 'int_limit' to '7f' as 'hex'
+
+When I split leftmost '32' bytes of 'es256_signature'
+and I rename 'leftmost' to 'r'
+and I rename 'es256_signature' to 's'
+
+# r
+When I copy 'int_spec' to 'r_final'
+When I copy 'r' to 'r_bytes'
+and I split the leftmost '1' bytes of 'r_bytes'
+If I verify number 'leftmost' is more than 'int_limit'
+When I set 'zero' to '00' as 'hex'
+and I append 'r' to 'zero'
+and I remove 'r'
+and I rename 'zero' to 'r'
+and I remove 'r_length'
+and I set 'r_length' to '33' as 'integer'
+Endif
+When I append the 'hex' of 'r_length' to 'r_final'
+and I append the 'hex' of 'r' to 'r_final'
+
+When I remove 'r'
+and I remove 'r_bytes'
+and I remove 'leftmost'
+
+# s
+When I copy 'int_spec' to 's_final'
+When I copy 's' to 's_bytes'
+and I split the leftmost '1' bytes of 's_bytes'
+If I verify number 'leftmost' is more than 'int_limit'
+When I set 'zero' to '00' as 'hex'
+and I append 's' to 'zero'
+and I remove 's'
+and I rename 'zero' to 's'
+and I remove 's_length'
+and I set 's_length' to '33' as 'integer'
+Endif
+When I append the 'hex' of 's_length' to 's_final'
+and I append the 'hex' of 's' to 's_final'
+
+When I remove 's'
+and I remove 's_bytes'
+and I remove 'leftmost'
+
+# header
+When I create the result of 'r_length + s_length + four'
+and I append the 'hex' of 'result' to 'header'
+and I append 'r_final' to 'header'
+and I append 's_final' to 'header'
+
+When I rename 'header' to 'der signature'
+
+Then print the 'der signature'
