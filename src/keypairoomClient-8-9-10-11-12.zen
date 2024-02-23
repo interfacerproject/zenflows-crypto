@@ -18,6 +18,7 @@ Scenario 'ecdh': Create the key
 Scenario 'ethereum': Create key
 Scenario 'reflow': Create the key
 Scenario 'eddsa': Create the key
+Scenario 'es256': Create the key
 
 
 # Loading the user name from data
@@ -72,6 +73,9 @@ When I rename the 'hash' to 'seed.reflow'
 When I create the hash of 'seed.reflow'
 When I rename the 'hash' to 'seed.bitcoin'
 
+When I create the hash of 'seed.bitcoin'
+When I rename the 'hash' to 'seed.es256'
+
 # end of the sorted creation flow
 
 When I create the ecdh key with secret key 'seed.ecdh'
@@ -79,12 +83,19 @@ When I create the eddsa key with secret key 'seed.eddsa'
 When I create the ethereum key with secret key 'seed.ethereum'
 When I create the reflow key with secret key 'seed.reflow'
 When I create the bitcoin key with secret key 'seed.bitcoin'
+When I create the es256 key with secret key 'seed.es256'
+
+# Here we create the "credential" key (used to request a Coconut zkp credential)
+# from the reflow key, cause they both are BL381 keys the credential sk doesn't have a pk
+When I pickup from path 'keyring.reflow'
+When I create credential key with secret 'reflow'
 
 When I create the ecdh public key
 When I create the eddsa public key
 When I create the ethereum address
 When I create the reflow public key
 When I create the bitcoin public key
+When I create the es256 public key
 
 # Creating the hashes of the single challenges, to OPTIONALLY help
 # regeneration of the keypair
