@@ -1,0 +1,193 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (C) 2022-2023 Dyne.org foundation <foundation@dyne.org>.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#Rule caller restroom-mw
+rule input encoding base58
+rule output encoding base58
+
+Scenario ecdh
+Scenario eddsa
+Scenario ethereum
+Scenario reflow
+Scenario es256
+
+# data
+Given I have a 'string' named 'timestamp'
+Given I have a 'string' named 'identity'
+Given I have a 'string dictionary' named 'user_id'
+and I have a 'eddsa_public_key'
+and I rename 'eddsa_public_key' to 'identity pk'
+Given I have a 'ethereum_address'
+Given I have a 'ecdh_public_key'
+Given I have a 'reflow_public_key'
+Given I have a 'es256_public_key'
+Given I have a 'base58' named 'bitcoin public key'
+
+#keys
+Given I have a 'string' named 'did_spec'
+Given I have a 'string' named 'signer_did_spec'
+Given I have a 'string array' named '@context'
+Given my name is in a 'string' named 'controller'
+and I have my 'keyring'
+and I rename 'identity' to 'description'
+
+#TODO: validate eddsa public key
+
+### Formulate the DID creation request
+When I create the 'string dictionary' named 'did document'
+and I move '@context' in 'did document'
+and I move 'description' in 'did document'
+If I verify 'identifier' is found in 'user_id'
+When I move 'identifier' from 'user_id' to 'did document'
+EndIf
+
+## did spec and id
+When I set 'did:dyne:' to 'did:dyne:' as 'string'
+and I append 'did_spec' to 'did:dyne:'
+and I append the string ':' to 'did:dyne:'
+and I append the 'base58' of 'identity pk' to 'did:dyne:'
+and I copy the 'did:dyne:' to 'id' in 'did document'
+
+## veririfcationMethod
+When I create the 'string array' named 'verificationMethod'
+
+# 1-ecdsa public key
+When I create the 'string dictionary' named 'verification-key'
+# pk
+When I create the 'base58' string of 'ecdh public key'
+When I move the 'base58' to 'publicKeyBase58' in 'verification-key'
+# type
+When I set 'type' to 'EcdsaSecp256k1VerificationKey2019' as 'string'
+When I move 'type' in 'verification-key'
+# id
+When I copy 'did:dyne:' to 'id'
+When I append the string '#ecdh_public_key' to 'id'
+When I move 'id' in 'verification-key'
+# controller
+When I copy the 'did:dyne:' to 'controller' in 'verification-key'
+When I move 'verification-key' in 'verificationMethod'
+
+# 2-reflow public key
+When I create the 'string dictionary' named 'verification-key'
+# pk
+When I create the 'base58' string of 'reflow public key'
+When I move the 'base58' to 'publicKeyBase58' in 'verification-key'
+# type
+When I set 'type' to 'ReflowBLS12381VerificationKey' as 'string'
+When I move 'type' in 'verification-key'
+# id
+When I copy 'did:dyne:' to 'id'
+When I append the string '#reflow_public_key' to 'id'
+When I move 'id' in 'verification-key'
+# controller
+When I copy the 'did:dyne:' to 'controller' in 'verification-key'
+When I move 'verification-key' in 'verificationMethod'
+
+# 3-bitcoin public key
+When I create the 'string dictionary' named 'verification-key'
+# pk
+When I create the 'base58' string of 'bitcoin public key'
+and I move the 'base58' to 'publicKeyBase58' in 'verification-key'
+# type
+When I set 'type' to 'EcdsaSecp256k1VerificationKey2019' as 'string'
+When I move 'type' in 'verification-key'
+# id
+When I copy 'did:dyne:' to 'id'
+When I append the string '#bitcoin_public_key' to 'id'
+When I move 'id' in 'verification-key'
+# controller
+When I copy the 'did:dyne:' to 'controller' in 'verification-key'
+When I move 'verification-key' in 'verificationMethod'
+
+# 4-eddsa public key
+When I create the 'string dictionary' named 'verification-key'
+# pk
+When I create the 'base58' string of 'identity pk'
+and I move the 'base58' to 'publicKeyBase58' in 'verification-key'
+# type
+When I set 'type' to 'Ed25519VerificationKey2018' as 'string'
+When I move 'type' in 'verification-key'
+# id
+When I copy 'did:dyne:' to 'id'
+When I append the string '#eddsa_public_key' to 'id'
+When I move 'id' in 'verification-key'
+# controller
+When I copy the 'did:dyne:' to 'controller' in 'verification-key'
+When I move 'verification-key' in 'verificationMethod'
+
+# 5-es256 public key
+When I create the 'string dictionary' named 'verification-key'
+# pk
+When I create the 'base58' string of 'es256 public key'
+and I move the 'base58' to 'publicKeyBase58' in 'verification-key'
+# type
+When I set 'type' to 'EcdsaSecp256r1VerificationKey' as 'string'
+When I move 'type' in 'verification-key'
+# id
+When I copy 'did:dyne:' to 'id'
+When I append the string '#es256_public_key' to 'id'
+When I move 'id' in 'verification-key'
+# controller
+When I copy the 'did:dyne:' to 'controller' in 'verification-key'
+When I move 'verification-key' in 'verificationMethod'
+
+# 6-ethereum address
+When I create the 'string dictionary' named 'verification-key'
+# address
+# this follows the CAIP-10(https://github.com/ChainAgnostic/CAIPs/blob/master/CAIPs/caip-10.md) spec
+# thus it is: namespace + ":" + chain_id + ":" + address
+When I set 'blockchainAccountId' to 'eip155:1:0x' as 'string'
+When I append the 'hex' of 'ethereum address' to 'blockchainAccountId'
+When I move 'blockchainAccountId' in 'verification-key'
+# type
+When I set 'type' to 'EcdsaSecp256k1RecoveryMethod2020' as 'string'
+When I move 'type' in 'verification-key'
+# id
+When I copy 'did:dyne:' to 'id'
+When I append the string '#ethereum_address' to 'id'
+When I move 'id' in 'verification-key'
+# controller
+When I copy the 'did:dyne:' to 'controller' in 'verification-key'
+When I move 'verification-key' in 'verificationMethod'
+
+When I move 'verificationMethod' in 'did document'
+### DID-Document ended
+
+# did document signature
+When I create the json escaped string of 'did document'
+and I create the ecdh signature of 'json escaped string'
+and I remove 'json escaped string'
+
+# result signature
+When I create the 'string dictionary' named 'result'
+and I copy 'did document' in 'result'
+and I copy 'timestamp' in 'result'
+and I create the json escaped string of 'result'
+and I create the eddsa signature of 'json escaped string'
+
+# signer id
+When I create the eddsa public key
+and I set 'id' to 'did:dyne:' as 'string'
+and I append 'signer_did_spec' to 'id'
+and I append the string ':' to 'id'
+and I append the 'base58' of 'eddsa public key' to 'id'
+
+# print did document, signature and signer id
+Then print the 'did document'
+Then print the 'ecdh signature'
+Then print the 'timestamp'
+Then print the 'eddsa signature'
+Then print the 'id'
