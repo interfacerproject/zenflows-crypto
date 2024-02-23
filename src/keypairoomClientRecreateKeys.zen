@@ -18,6 +18,7 @@ Scenario 'ecdh': Create the key
 Scenario 'ethereum': Create key
 Scenario 'reflow': Create the key
 Scenario 'eddsa': Create the key
+Scenario 'es256': Create the key
 
 # here we load the seed as a mnemonic
 Given I have a 'mnemonic' named 'seed'
@@ -39,12 +40,22 @@ When I create the  hash  of 'seed.ethereum'
 When I rename the 'hash' to 'seed.reflow'
 When I create the  hash  of 'seed.reflow'
 When I rename the 'hash' to 'seed.bitcoin'
+When I create the  hash  of 'seed.bitcoin'
+When I rename the 'hash' to 'seed.es256'
+
 
 When I create the ecdh key with secret key 'seed.ecdh'
 When I create the eddsa key with secret key 'seed.eddsa'
 When I create the ethereum key with secret key 'seed.ethereum'
 When I create the reflow key with secret key 'seed.reflow'
 When I create the bitcoin key with secret key 'seed.bitcoin'
+When I create the es256 key with secret key 'seed.es256'
+
+# Here we create the "credential" key (used to request a Coconut zkp credential)
+# from the reflow key, cause they both are BL381 keys the credential sk doesn't have a pk
+When I pickup from path 'keyring.reflow'
+When I create credential key with secret 'reflow'
+
 
 # PKs generation
 When I create the ecdh public key
@@ -52,6 +63,7 @@ When I create the eddsa public key
 When I create the ethereum address
 When I create the reflow public key
 When I create the bitcoin public key
+When I create the es256 public key
 
 # This prints the keyring containing the SKs
 Then print the 'keyring'
@@ -62,6 +74,7 @@ Then print the 'eddsa public key' as 'base58'
 Then print the 'ethereum address'
 Then print the 'reflow public key' as 'base58'
 Then print the 'bitcoin public key' as 'base58'
+Then print the 'es256 public key' as 'base58'
 
 # This prints the seed for the private keys as mnemonic
 Then print the 'seed' as 'mnemonic'
