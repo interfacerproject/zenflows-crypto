@@ -51,7 +51,7 @@ When I create the 'string dictionary' named 'did document'
 and I move '@context' in 'did document'
 and I move 'description' in 'did document'
 If I verify 'identifier' is found in 'user_id'
-When I move 'identifier' from 'user_id' to 'did document'
+When I move 'identifier' from 'user_id' in 'did document'
 EndIf
 
 ## did spec and id
