@@ -1,0 +1,34 @@
+
+# This script generates all the pubkeys used in the current DID version, Scenario 'nameOfScenario': comment here whatever
+# https://explorer.did.dyne.org/details/did:dyne:sandbox.signroom:ZtAyHGtknGoWsJK2soJ24ZL1YN6z7jr7FSPmAiETrHT
+
+# Loading scenarios
+Scenario 'ecdh': Create the public key
+Scenario 'es256': Create the public key
+Scenario 'ethereum': Create the address
+Scenario 'reflow': Create the public key
+
+Scenario 'eddsa': Create the public key
+Scenario 'bbs': implementation of https://identity.foundation/bbs-signature/draft-irtf-cfrg-bbs-signatures.html
+Scenario 'pvss': Create the public key
+Scenario 'qp': Create the public key
+
+# Loading the private keys
+Given I have the 'keyring'
+
+
+When I create the ecdh public key
+When I create the es256 public key
+When I create the reflow public key
+
+When I create the bitcoin public key
+When I create the eddsa public key
+When I create the ethereum address
+
+# Here we pring all the output
+Then print the 'ecdh public key' as 'base58'
+Then print the 'es256 public key' as 'base58'
+Then print the 'eddsa public key' as 'base58'
+Then print the 'reflow public key' as 'base58'
+Then print the 'bitcoin public key' as 'base58'
+Then print the 'ethereum address'
