@@ -61,15 +61,15 @@ zexe() {
     fi
 
     if [ "$keys" != "" ]; then
-	output=`zenroom -z $script -c $conf -a $tmpin -k $tmpkey`
+	output=`zenroom -c $conf -a $tmpin -k $tmpkey -z $script`
 	status=$?
 	rm -f $tmpin $tmpkey
     elif [ "$input" != "" ]; then
-	output=`zenroom -z $script -c $conf -a $tmpin`
+	output=`zenroom -c $conf -a $tmpin -z $script`
 	status=$?
 	rm -f $tmpin
     else
-	output=`zenroom -z $script -c $conf`
+	output=`zenroom -c $conf -z $script`
 	status=$?
     fi
     rm -f $script # getscript() generates this mktemp
