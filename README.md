@@ -57,8 +57,8 @@ autonumber
   participant C as 📱Client
   participant S as Server
 
-  S->>S: Configured with secret salt 
-  C->>U: Greets, asks email, name and challenges 
+  S->>S: Configured with secret salt
+  C->>U: Greets, asks email, name and challenges
   U->>C: Answers email, name
   C->>+S: Sends name and email to server (ASAP)
   S->>S: Verifies email is not a duplicate
@@ -72,9 +72,9 @@ autonumber
 ```
 ### Zencode
 
-- [keypairoomClient-8-9-10-11-12](src/keypairoomClient-8-9-10-11-12.ts)
+- [keypairoomClient-8-9-10-11-12](src/keypairoomClient-8-9-10-11-12.zen)
 - [keypairoomServer-6-7](src/keypairoomServer-6-7.zen)
-- [keypairoomClientRecreateKeys](src/keypairoomClientRecreateKeys.ts)
+- [keypairoomClientRecreateKeys](src/keypairoomClientRecreateKeys.zen)
 
 ### Notes
 
@@ -262,7 +262,7 @@ The supported commands are `ON`, `OFF`, `CLOSE`. The `service` key descrive the 
   "token": "ZmFiYWNjZXNzIHRva2Vu",
   "command": "CLOSE",
   "service": "shutdown",
-  "timestamp": 1234567 
+  "timestamp": 1234567
 }
 ```
 The value that will have to be sent is analogous to the previous one
@@ -296,4 +296,3 @@ We are signing the string `"<command>:<counter>:<token>:<service>"`
 
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
