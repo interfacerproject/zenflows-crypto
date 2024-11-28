@@ -16,7 +16,6 @@
 
 #Rule caller restroom-mw
 rule input encoding base58
-rule output encoding base58
 
 Scenario ecdh
 Scenario eddsa
@@ -187,7 +186,7 @@ and I append the 'base58' of 'eddsa public key' to 'id'
 
 # print did document, signature and signer id
 Then print the 'did document'
-Then print the 'ecdh signature'
+Then print the 'ecdh signature' as 'base58'
 Then print the 'timestamp'
 Then print the 'eddsa signature'
 Then print the 'id'
