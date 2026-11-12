@@ -63,4 +63,7 @@
 !/docs/*.md
 !/docs/*.png
 !/docs/*.jpg
+!/docs/assets/
+/docs/assets/*
+!/docs/assets/funding/
 
